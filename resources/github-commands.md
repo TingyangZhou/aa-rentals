@@ -10,10 +10,10 @@ Step 2: git pull origin dev
 Step 3: git checkout -b <your-branch-name>
 
 <!-- START CODING: When Pulling from dev to your branch -->
-Step 2: git checkout dev
-Step 1: git pull origin dev
-Step 2: git checkout <your-branch-name>
-Step 3: git merge dev
+Step 1: git checkout dev
+Step 2: git pull origin dev
+Step 3: git checkout <your-branch-name>
+Step 4: git merge dev
 
 <!-- END CODING: When Pushing from your branch to dev -->
 Step 1: git checkout dev
