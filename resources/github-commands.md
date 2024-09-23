@@ -9,15 +9,20 @@ Step 1: git checkout dev
 Step 2: git pull origin dev
 Step 3: git checkout -b <your-branch-name>
 
-
-<!-- START CODING: When Pulling from dev to your branch -->
+<!-- START CODING: PULL FROM GITHUB into LOCAL BRANCH-->
 Step 1: git checkout dev
 Step 2: git pull origin dev
 Step 3: git checkout <your-branch-name>
 Step 4: git merge dev
 
-<!-- END CODING: When Pushing from your branch to dev -->
+<!-- END CODING: PUSH TO LOCAL BRANCH -->
+Step 1: git add .
+Step 2: git commit -m 'Comment Here'
+Step 3: git push
+
+<!-- END CODING: PUSH TO GITHUB from LOCAL BRANCH-->
 Step 1: git checkout dev
 Step 2: git pull origin dev
 Step 3: git merge <your-branch-name>
 Step 4: git push origin dev
+
