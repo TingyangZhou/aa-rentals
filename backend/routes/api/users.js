@@ -7,7 +7,6 @@ const { User } = require('../../db/models');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { Op } = require('sequelize');
 
 const router = express.Router();
 
@@ -44,7 +43,7 @@ const validateSignup = [
 router.post(
   '/',
   validateSignup,
-  async (req, res) => {    
+  async (req, res) => {
     const { email, password, username, firstName, lastName } = req.body;
     const hashedPassword = bcrypt.hashSync(password);
 
