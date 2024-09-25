@@ -35,7 +35,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     address: {
       type: DataTypes.STRING(255),
-      allowNull: false
+      allowNull: false,
+      unique: true
     },
     city: {
       type: DataTypes.STRING(100),
@@ -83,11 +84,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Spot',
-    defaultScope: {
-      attributes: {
-        exclude: ['createdAt', 'updatedAt'],
-      },
-    },
+   
   });
   return Spot;
 };
