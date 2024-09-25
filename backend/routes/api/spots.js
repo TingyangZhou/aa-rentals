@@ -3,10 +3,11 @@ const express = require('express')
 const bcrypt = require('bcryptjs');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Spot, SpotImage, Review } = require('../../db/models');
+const { Spot, SpotImage, Review, sequelize } = require('../../db/models');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
+const { where } = require('sequelize');
 
 const router = express.Router();
 
@@ -100,7 +101,7 @@ router.post(
     }
 );
 
-// get all spots
+// Get all Spots
 router.get('/', async (_req, res) => {
     const spots = await Spot.findAll({
         include:[{
@@ -141,5 +142,52 @@ router.get('/', async (_req, res) => {
     
 })
 
+//Get all Spots owned by the Current User
+router.get(
+    '/current',
+    requireAuth,
+    async (req, res) => {
+        const userId = req.user.id;
+        const spots = await Spot.findAll({
+            where: {ownerId: userId},
+            include: [
+                {model: Review},
+                {model: SpotImage}
+            ],
+            attributes: {
+                include: [
+                    [sequelize.fn('AVG', sequelize.col('Reviews.stars')),'avgRating'],
+                    [sequelize.col('SpotImages.url'), 'previewImage']
+                ]
+            },
+            group: ['spot.id', 'SpotImages.id']
+        });
+
+        const safeSpots = spots.map(spot => ({
+            id: spot.id,
+            ownerId: spot.ownerId,
+            address: spot.address,
+            city: spot.city,
+            state: spot.state,
+            country: spot.country,
+            lat: spot.lat,
+            lng: spot.lng,
+            name: spot.name,
+            description: spot.description,
+            price: spot.price,
+            createdAt: spot.createdAt,
+            updatedAt: spot.updatedAt,
+            avgRating: spot.dataValues.avgRating,
+            previewImage: spot.dataValues.previewImage
+        }));
+
+        await setTokenCookie(res, safeSpots)
+
+        res.status(200);
+        return res.json({
+            Spots: safeSpots
+        });
+    }
+);
 
 module.exports = router;
