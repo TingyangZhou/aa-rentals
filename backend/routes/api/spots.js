@@ -3,7 +3,7 @@ const express = require('express')
 const bcrypt = require('bcryptjs');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Spot, SpotImage, Review } = require('../../db/models');
+const { Spot, SpotImage, Review, User } = require('../../db/models');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
@@ -118,9 +118,14 @@ router.get('/', async (_req, res) => {
         let reviewsCount = await Review.count(
             {where:{spotId:spot.id}}
         );
+
+        if (reviewsCount !== 0){
+            let avgRating = totalStars/reviewsCount;
+            spot.dataValues.avgRating = avgRating;
+        } else {
+            spot.dataValues.avgRating = 0;
+        }
         
-        let avgRating = totalStars/reviewsCount;
-        spot.dataValues.avgRating = avgRating;
 
         if (spot.SpotImages && spot.SpotImages.length > 0) {
             spot.dataValues.previewImage = spot.SpotImages[0].dataValues.url; 
@@ -138,6 +143,53 @@ router.get('/', async (_req, res) => {
 
     res.status(200).json(
         {spots:spotsWithRating});
+    
+})
+
+//Get details of a Spot from an id
+router.get('/:spotId', async (req, res) =>{
+    try{
+        const spotId = req.params.spotId;
+        let spot = await Spot.findByPk(spotId, {
+            include:[{
+                model:SpotImage,
+                attributes: ['id', 'url', 'preview'],
+                required:false
+            },{
+               model: User, 
+               as: 'Owner',
+               attributes: ['id', 'firstName', 'lastName'], 
+               required:true        
+            }]
+        });
+    
+        if (!spot) {
+            res.status(404).json({
+                "message": "Spot couldn't be found"
+              })
+        }
+    
+      
+        let totalStars = await Review.sum(
+            'stars',
+            {where:{spotId:spot.id}}
+        );
+        let reviewsCount = await Review.count(
+            {where:{spotId:spot.id}}
+        );
+        
+        if (reviewsCount !== 0){
+            let avgRating = totalStars/reviewsCount;
+            spot.dataValues.avgRating = avgRating;
+        } else {
+            spot.dataValues.avgRating = 0;
+        }
+        spot.dataValues.numReviews = reviewsCount;   
+    
+        res.status(200).json(spot);
+    } catch(error){
+        res.status(500).json({message:'Internal server error.'})
+    }
     
 })
 
