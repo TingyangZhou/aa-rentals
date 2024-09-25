@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     url: {
-      type:DataTypes.STRING,
+      type:DataTypes.TEXT,
       allowNull:false,
       validate:{
         isUrl: true 
@@ -37,9 +37,11 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'SpotImage',
+    timestamps: true,      
+    updatedAt: false,
     defaultScope: {
       attributes: {
-        exclude: ['createdAt', 'updatedAt'],
+        exclude: ['createdAt'],
       },
     },
   });
