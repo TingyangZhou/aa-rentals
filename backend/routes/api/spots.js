@@ -3,7 +3,7 @@ const express = require('express')
 const bcrypt = require('bcryptjs');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { User } = require('../../db/models');
+const { Spot } = require('../../db/models');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
@@ -15,6 +15,30 @@ const validateSpots = [
     check('address')
         .exists({ checkFalsy: true })
         .withMessage('Address is required'),
+    check('city')
+        .exists({ checkFalsy: true })
+        .withMessage('City is required'),
+    check('state')
+        .exists({ checkFalsy: true })
+        .withMessage('State is required'),
+    check('country')
+        .exists({ checkFalsy: true })
+        .withMessage('Country is required'),
+    check('lat')
+        .isFloat({min: -90, max: 90})
+        .withMessage('Latitude must be within -90 and 90'),
+    check('lng')
+        .isFloat({min: -180, max: 180})
+        .withMessage('Longitude must be within -180 and 180'),
+    check('name')
+        .isLength({max: 50})
+        .withMessage('Name must be less than 50 characters'),
+    check('description')
+        .exists({ checkFalsy: true })
+        .withMessage('Description is required'),
+    check('price')
+        .isFloat({min: 0})
+        .withMessage('Price per day must be a positive number'),
     handleValidationErrors
 ]   
 
@@ -22,8 +46,57 @@ const validateSpots = [
 router.post(
     '/',
     validateSpots,
+    requireAuth,
     async (req, res, next) => {
+        const {
+            address,
+            city,
+            state,
+            country,
+            lat,
+            lng,
+            name,
+            description,
+            price,
+        } = req.body;
 
+        const ownerId = req.user.id;
+        
+        const spot = await Spot.create({
+            ownerId,
+            address,
+            city,
+            state,
+            country,
+            lat,
+            lng,
+            name,
+            description,
+            price
+        })
+
+        const safeSpot = {
+            id: spot.id,
+            ownerId: spot.ownerId,
+            address: spot.address,
+            city: spot.city,
+            state: spot.state,
+            country: spot.country,
+            lat: spot.lat,
+            lng: spot.lng,
+            name: spot.name,
+            description: spot.description,
+            price: spot.price,
+            createdAt: spot.createdAt,
+            updatedAt: spot.updatedAt,
+        };
+
+        await setTokenCookie(res, safeSpot);
+
+        res.status(201);
+        return res.json({
+            spot: safeSpot
+        });
     }
 );
 
