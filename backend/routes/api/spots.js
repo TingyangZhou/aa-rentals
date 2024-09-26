@@ -213,53 +213,6 @@ router.get('/', async (_req, res) => {
     
 })
 
-// Get details of a Spot from an id
-router.get('/spots/:spotId', async (req, res) =>{
-    try{
-        const spotId = req.params.spotId;
-        let spot = await Spot.findByPk(spotId, {
-            include:[{
-                model:SpotImage,
-                attributes: ['id', 'url', 'preview'],
-                required:false
-            },{
-               model: User, 
-               as: 'Owner',
-               attributes: ['id', 'firstName', 'lastName'], 
-               required:true        
-            }]
-        });
-    
-        if (!spot) {
-            res.status(404).json({
-                "message": "Spot couldn't be found"
-              })
-        }
-    
-      
-        let totalStars = await Review.sum(
-            'stars',
-            {where:{spotId:spot.id}}
-        );
-        let reviewsCount = await Review.count(
-            {where:{spotId:spot.id}}
-        );
-        
-        if (reviewsCount !== 0){
-            let avgRating = totalStars/reviewsCount;
-            spot.dataValues.avgRating = avgRating;
-        } else {
-            spot.dataValues.avgRating = 0;
-        }
-        spot.dataValues.numReviews = reviewsCount;   
-    
-        res.status(200).json(spot);
-    } catch(error){
-        res.status(500).json({message:'Internal server error.'})
-    }
-    
-})
-
 // Get all Spots owned by the Current User
 router.get(
     '/current',
@@ -307,6 +260,101 @@ router.get(
         });
     }
 );
+
+// Get details of a Spot from an id
+router.get('/:spotId', async (req, res) =>{
+    try{
+        const spotId = req.params.spotId;
+        let spot = await Spot.findByPk(spotId, {
+            include:[{
+                model:SpotImage,
+                attributes: ['id', 'url', 'preview'],
+                required:false
+            },{
+               model: User, 
+               as: 'Owner',
+               attributes: ['id', 'firstName', 'lastName'], 
+               required:true        
+            }]
+        });
+    
+        if (!spot) {
+            res.status(404).json({
+                "message": "Spot couldn't be found"
+              })
+        }
+    
+      
+        let totalStars = await Review.sum(
+            'stars',
+            {where:{spotId:spot.id}}
+        );
+        let reviewsCount = await Review.count(
+            {where:{spotId:spot.id}}
+        );
+        
+        if (reviewsCount !== 0){
+            let avgRating = totalStars/reviewsCount;
+            spot.dataValues.avgRating = avgRating;
+        } else {
+            spot.dataValues.avgRating = 0;
+        }
+        spot.dataValues.numReviews = reviewsCount;   
+    
+        res.status(200).json(spot);
+    } catch(error){
+        res.status(500).json({message:'Internal server error.'})
+    }
+    
+})
+
+// // Get all Spots owned by the Current User
+// router.get(
+//     '/current',
+//     requireAuth,
+//     async (req, res) => {
+//         const userId = req.user.id;
+//         const spots = await Spot.findAll({
+//             where: {ownerId: userId},
+//             include: [
+//                 {model: Review},
+//                 {model: SpotImage}
+//             ],
+//             attributes: {
+//                 include: [
+//                     [fn('AVG', col('Reviews.stars')),'avgRating'],
+//                     [col('SpotImages.url'), 'previewImage']
+//                 ]
+//             },
+//             group: ['spot.id', 'SpotImages.id']
+//         });
+
+//         const safeSpots = spots.map(spot => ({
+//             id: spot.id,
+//             ownerId: spot.ownerId,
+//             address: spot.address,
+//             city: spot.city,
+//             state: spot.state,
+//             country: spot.country,
+//             lat: spot.lat,
+//             lng: spot.lng,
+//             name: spot.name,
+//             description: spot.description,
+//             price: spot.price,
+//             createdAt: spot.createdAt,
+//             updatedAt: spot.updatedAt,
+//             avgRating: spot.dataValues.avgRating,
+//             previewImage: spot.dataValues.previewImage
+//         }));
+
+//         await setTokenCookie(res, safeSpots)
+
+//         res.status(200);
+//         return res.json({
+//             Spots: safeSpots
+//         });
+//     }
+// );
 
 // Edit a Spot
 
