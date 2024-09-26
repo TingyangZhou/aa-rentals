@@ -171,6 +171,129 @@ router.post(
 
 
 //Get all Spots owned by the Current User
+        const userId = req.user.id;
+        const spotId = parseInt(req.params.spotId, 10);
+
+        const existingSpotId = await Spot.findByPk(spotId);
+        if (!existingSpotId) {
+            res.status(404);
+            return res.json({
+                message: "Spot couldn't be found"
+            });
+        }
+
+        const existingReview = await Review.findOne({
+            where: {userId, spotId}
+        });
+        if (existingReview) {
+            res.status(500);
+            return res.json({
+                message: "User already has a review for this spot"
+            });
+        }
+        
+        const spotReview = await Review.create({
+            userId,
+            spotId,
+            review,
+            stars,
+        });
+
+        res.status(201);
+        return res.json({
+            id: spotReview.id,
+            userId: spotReview.userId,
+            spotId: spotReview.spotId,
+            review: spotReview.review,
+            stars: spotReview.stars,
+            createdAt: spotReview.createdAt,
+            updatedAt: spotReview.updatedAt
+        });
+    }
+);
+
+// Add an Image to a Spot based on the Spot's id
+router.post(
+    '/:spotId/images',
+    requireAuth,
+    async (req, res) => {
+        const {url, preview} = req.body;
+
+        const userId = req.user.id;
+        const spotId = parseInt(req.params.spotId, 10);
+
+        const existingSpotId = await Spot.findOne({
+            where: {id: spotId, ownerId: userId}
+        });
+        if (!existingSpotId) {
+            res.status(404);
+            return res.json({
+                message: "Spot couldn't be found" // And needs to belong to user
+            });
+        }
+
+        const spotImage = await SpotImage.create({
+            spotId,
+            url,
+            preview
+        });
+
+        res.status(201);
+        return res.json({
+            id: spotImage.id,
+            url: spotImage.url,
+            preview: spotImage.preview
+        });
+    }
+);
+
+// Get all Spots
+router.get('/', async (_req, res) => {
+    const spots = await Spot.findAll({
+        include:[{
+            model:SpotImage,
+            where:{preview:true},
+            required:false
+        }]
+    });
+    
+    let spotsWithRating = await Promise.all(spots.map(async spot => {
+        let totalStars = await Review.sum(
+            'stars',
+            {where:{spotId:spot.id}}
+        );
+        let reviewsCount = await Review.count(
+            {where:{spotId:spot.id}}
+        );
+
+        if (reviewsCount !== 0){
+            let avgRating = totalStars/reviewsCount;
+            spot.dataValues.avgRating = avgRating;
+        } else {
+            spot.dataValues.avgRating = 0;
+        }
+        
+
+        if (spot.SpotImages && spot.SpotImages.length > 0) {
+            spot.dataValues.previewImage = spot.SpotImages[0].dataValues.url; 
+        } else {
+            spot.dataValues.previewImage = null;
+        }
+      
+        delete spot.dataValues.SpotImages;
+        
+
+        return spot
+    })
+)
+        // console.log(`\nspotId: `, spot.id)
+
+    res.status(200).json(
+        {spots:spotsWithRating});
+    
+})
+
+// Get all Spots owned by the Current User
 router.get(
     '/current',
     requireAuth,
