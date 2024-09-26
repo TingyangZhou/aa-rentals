@@ -155,52 +155,6 @@ router.get('/', async (_req, res) => {
     
 })
 
-//Get details of a Spot from an id
-router.get('/:spotId', async (req, res) =>{
-    try{
-        const spotId = req.params.spotId;
-        let spot = await Spot.findByPk(spotId, {
-            include:[{
-                model:SpotImage,
-                attributes: ['id', 'url', 'preview'],
-                required:false
-            },{
-               model: User, 
-               as: 'Owner',
-               attributes: ['id', 'firstName', 'lastName'], 
-               required:true        
-            }]
-        });
-    
-        if (!spot) {
-            res.status(404).json({
-                "message": "Spot couldn't be found"
-              })
-        }
-    
-      
-        let totalStars = await Review.sum(
-            'stars',
-            {where:{spotId:spot.id}}
-        );
-        let reviewsCount = await Review.count(
-            {where:{spotId:spot.id}}
-        );
-        
-        if (reviewsCount !== 0){
-            let avgRating = totalStars/reviewsCount;
-            spot.dataValues.avgRating = avgRating;
-        } else {
-            spot.dataValues.avgRating = 0;
-        }
-        spot.dataValues.numReviews = reviewsCount;   
-    
-        res.status(200).json(spot);
-    } catch(error){
-        res.status(500).json({message:'Internal server error.'})
-    }
-    
-})
 
 //Get all Spots owned by the Current User
 router.get(
@@ -250,6 +204,55 @@ router.get(
     }
 );
 
+
+//Get details of a Spot from an id
+router.get('/:spotId', async (req, res) =>{
+    try{
+        const spotId = req.params.spotId;
+        let spot = await Spot.findByPk(spotId, {
+            include:[{
+                model:SpotImage,
+                attributes: ['id', 'url', 'preview'],
+                required:false
+            },{
+               model: User, 
+               as: 'Owner',
+               attributes: ['id', 'firstName', 'lastName'], 
+               required:true        
+            }]
+        });
+    
+        if (!spot) {
+            res.status(404).json({
+                "message": "Spot couldn't be found"
+              })
+        }
+    
+        let totalStars = await Review.sum(
+            'stars',
+            {where:{spotId:spot.id}}
+        );
+        let reviewsCount = await Review.count(
+            {where:{spotId:spot.id}}
+        );
+        
+        if (reviewsCount !== 0){
+            let avgRating = totalStars/reviewsCount;
+            spot.dataValues.avgRating = avgRating;
+        } else {
+            spot.dataValues.avgRating = 0;
+        }
+        spot.dataValues.numReviews = reviewsCount;   
+    
+        res.status(200).json(spot);
+
+    } catch(error){
+        res.status(500).json({message:'Internal server error.'})
+    }
+    
+})
+
+
 // Edit a Spot
 
 // const getUserFromCookies = (req, res, next) => {
@@ -259,20 +262,27 @@ router.get(
 //     next();
 // }
 
-router.put(
-    '/:spotId',
-    validateSpots,
-    requireAuth,
-    // getUserFromCookies,
-    async (req, res, next) => {
-        const spotId = req.params.spotId;
+const checkSpotExists = async (req, res, next) =>{
+    const spotId = req.params.spotId;
         let spot = await Spot.findByPk(spotId);
 
         if (!spot) {
             res.status(404).json({
                 "message": "Spot couldn't be found"
               })
-        }      
+        }  
+    next();
+}
+
+router.put(
+    '/:spotId',
+    checkSpotExists,
+    requireAuth,
+    validateSpots,
+    // getUserFromCookies,
+    async (req, res, next) => {
+        const spotId = req.params.spotId;
+        let spot = await Spot.findByPk(spotId);
 
         if (req.user.id === spot.ownerId){
           
@@ -328,5 +338,32 @@ router.put(
     } 
        
 );
+
+// delete a spot
+router.delete('/:spotId', 
+    requireAuth,
+    async (req, res, next) => {
+     const spotId = req.params.spotId;
+     const userId = req.user.id;
+     const spot = await Spot.findByPk(spotId)
+
+     if (!spot) {
+        const err = new Error("Spot coundn't be found");
+        err.status = 404;
+        return next(err);
+    }  
+
+     if(userId === spot.ownerId){
+        await spot.destroy();
+        res.status(200).json({
+            message: "Successfully deleted"
+        })
+     } else{
+        const err = new Error('Spot must belong to the current user');
+        err.status = 403;
+        return next(err);
+     }
+         
+})
 
 module.exports = router;
