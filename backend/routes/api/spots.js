@@ -167,6 +167,41 @@ router.post(
     }
 );
 
+// Add an Image to a Spot based on the Spot's id
+router.post(
+    '/:spotId/images',
+    requireAuth,
+    async (req, res) => {
+        const {url, preview} = req.body;
+
+        const userId = req.user.id;
+        const spotId = parseInt(req.params.spotId, 10);
+
+        const existingSpotId = await Spot.findOne({
+            where: {id: spotId, ownerId: userId}
+        });
+        if (!existingSpotId) {
+            res.status(404);
+            return res.json({
+                message: "Spot couldn't be found" // And needs to belong to user
+            });
+        }
+
+        const spotImage = await SpotImage.create({
+            spotId,
+            url,
+            preview
+        });
+
+        res.status(201);
+        return res.json({
+            id: spotImage.id,
+            url: spotImage.url,
+            preview: spotImage.preview
+        });
+    }
+);
+
 // Get all Spots
 router.get('/', async (_req, res) => {
     const spots = await Spot.findAll({
