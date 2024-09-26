@@ -7,14 +7,19 @@ const { Spot, SpotImage, Review, User } = require('../../db/models');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
+const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
+const { jwtConfig } = require('../../config');
+const { secret } = jwtConfig;
 
 const router = express.Router();
+router.use(cookieParser());
 
 const validateSpots = [
     // Example
     check('address')
         .exists({ checkFalsy: true })
-        .withMessage('Address is required'),
+        .withMessage('Street address is required'),
     check('city')
         .exists({ checkFalsy: true })
         .withMessage('City is required'),
@@ -193,5 +198,86 @@ router.get('/:spotId', async (req, res) =>{
     
 })
 
+
+// Edit a Spot
+
+const getUserFromCookies = (req, res, next) => {
+    const token = req.cookies.token;
+    const decoded = jwt.verify(token, secret);
+    req.user = decoded.data;
+    next();
+}
+
+router.put(
+    '/:spotId',
+    validateSpots,
+    requireAuth,
+    getUserFromCookies,
+    async (req, res, next) => {
+        const spotId = req.params.spotId;
+        let spot = await Spot.findByPk(spotId);
+
+        if (!spot) {
+            res.status(404).json({
+                "message": "Spot couldn't be found"
+              })
+        }
+
+       
+
+        if (req.user.id === spot.ownerId){
+          
+            const {
+                address,
+                city,
+                state,
+                country,
+                lat,
+                lng,
+                name,
+                description,
+                price,
+            } = req.body;
+    
+            
+            spot.set({
+                address: address,
+                city: city,
+                state: state,
+                country: country,
+                lat: lat,
+                lng: lng,
+                name: name,
+                description: description,
+                price: price
+            })
+    
+            await spot.save();
+    
+            const safeSpot = {
+                id: spot.id,
+                ownerId: spot.ownerId,
+                address: spot.address,
+                city: spot.city,
+                state: spot.state,
+                country: spot.country,
+                lat: spot.lat,
+                lng: spot.lng,
+                name: spot.name,
+                description: spot.description,
+                price: spot.price,
+                createdAt: spot.createdAt,
+                updatedAt: spot.updatedAt
+            };
+            res.status(200);
+            res.json(safeSpot);
+
+        }else{
+            res.status(403).json('Spot must belong to the current user.')
+        }
+
+    } 
+       
+);
 
 module.exports = router;
