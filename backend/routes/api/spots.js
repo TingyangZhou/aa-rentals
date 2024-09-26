@@ -7,6 +7,7 @@ const { Spot, SpotImage, Review, User } = require('../../db/models');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
+const { where, fn, col } = require('sequelize');
 
 const router = express.Router();
 
@@ -100,7 +101,7 @@ router.post(
     }
 );
 
-// get all spots
+// Get all Spots
 router.get('/', async (_req, res) => {
     const spots = await Spot.findAll({
         include:[{
@@ -193,5 +194,52 @@ router.get('/:spotId', async (req, res) =>{
     
 })
 
+//Get all Spots owned by the Current User
+router.get(
+    '/current',
+    requireAuth,
+    async (req, res) => {
+        const userId = req.user.id;
+        const spots = await Spot.findAll({
+            where: {ownerId: userId},
+            include: [
+                {model: Review},
+                {model: SpotImage}
+            ],
+            attributes: {
+                include: [
+                    [fn('AVG', col('Reviews.stars')),'avgRating'],
+                    [col('SpotImages.url'), 'previewImage']
+                ]
+            },
+            group: ['spot.id', 'SpotImages.id']
+        });
+
+        const safeSpots = spots.map(spot => ({
+            id: spot.id,
+            ownerId: spot.ownerId,
+            address: spot.address,
+            city: spot.city,
+            state: spot.state,
+            country: spot.country,
+            lat: spot.lat,
+            lng: spot.lng,
+            name: spot.name,
+            description: spot.description,
+            price: spot.price,
+            createdAt: spot.createdAt,
+            updatedAt: spot.updatedAt,
+            avgRating: spot.dataValues.avgRating,
+            previewImage: spot.dataValues.previewImage
+        }));
+
+        await setTokenCookie(res, safeSpots)
+
+        res.status(200);
+        return res.json({
+            Spots: safeSpots
+        });
+    }
+);
 
 module.exports = router;
