@@ -252,18 +252,18 @@ router.get(
 
 // Edit a Spot
 
-const getUserFromCookies = (req, res, next) => {
-    const token = req.cookies.token;
-    const decoded = jwt.verify(token, secret);
-    req.user = decoded.data;
-    next();
-}
+// const getUserFromCookies = (req, res, next) => {
+//     const token = req.cookies.token;
+//     const decoded = jwt.verify(token, secret);
+//     req.user = decoded.data;
+//     next();
+// }
 
 router.put(
     '/:spotId',
     validateSpots,
     requireAuth,
-    getUserFromCookies,
+    // getUserFromCookies,
     async (req, res, next) => {
         const spotId = req.params.spotId;
         let spot = await Spot.findByPk(spotId);
@@ -272,9 +272,7 @@ router.put(
             res.status(404).json({
                 "message": "Spot couldn't be found"
               })
-        }
-
-       
+        }      
 
         if (req.user.id === spot.ownerId){
           
