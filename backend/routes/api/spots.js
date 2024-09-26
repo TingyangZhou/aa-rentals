@@ -60,7 +60,6 @@ const validateReviews = [
     handleValidationErrors
 ];
 
-
 // Create a Review for a Spot based on the Spot's id
 router.post(
     '/:spotId/reviews',
@@ -109,7 +108,6 @@ router.post(
         });
     }
 );
-
 
 // Create a Spot
 router.post(
