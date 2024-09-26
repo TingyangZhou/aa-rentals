@@ -308,63 +308,6 @@ router.get('/:spotId', async (req, res) =>{
     
 })
 
-// // Get all Spots owned by the Current User
-// router.get(
-//     '/current',
-//     requireAuth,
-//     async (req, res) => {
-//         const userId = req.user.id;
-//         const spots = await Spot.findAll({
-//             where: {ownerId: userId},
-//             include: [
-//                 {model: Review},
-//                 {model: SpotImage}
-//             ],
-//             attributes: {
-//                 include: [
-//                     [fn('AVG', col('Reviews.stars')),'avgRating'],
-//                     [col('SpotImages.url'), 'previewImage']
-//                 ]
-//             },
-//             group: ['spot.id', 'SpotImages.id']
-//         });
-
-//         const safeSpots = spots.map(spot => ({
-//             id: spot.id,
-//             ownerId: spot.ownerId,
-//             address: spot.address,
-//             city: spot.city,
-//             state: spot.state,
-//             country: spot.country,
-//             lat: spot.lat,
-//             lng: spot.lng,
-//             name: spot.name,
-//             description: spot.description,
-//             price: spot.price,
-//             createdAt: spot.createdAt,
-//             updatedAt: spot.updatedAt,
-//             avgRating: spot.dataValues.avgRating,
-//             previewImage: spot.dataValues.previewImage
-//         }));
-
-//         await setTokenCookie(res, safeSpots)
-
-//         res.status(200);
-//         return res.json({
-//             Spots: safeSpots
-//         });
-//     }
-// );
-
-// Edit a Spot
-
-// const getUserFromCookies = (req, res, next) => {
-//     const token = req.cookies.token;
-//     const decoded = jwt.verify(token, secret);
-//     req.user = decoded.data;
-//     next();
-// }
-
 router.put(
     '/:spotId',
     validateSpots,
