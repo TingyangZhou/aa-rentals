@@ -3,7 +3,7 @@ const express = require('express')
 const bcrypt = require('bcryptjs');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Spot, SpotImage, Review, User } = require('../../db/models');
+const { Spot, SpotImage, Review, User, ReviewImage } = require('../../db/models');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
@@ -13,6 +13,7 @@ const { where, fn, col } = require('sequelize');
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 const { jwtConfig } = require('../../config');
+const reviewimage = require('../../db/models/reviewimage');
 const { secret } = jwtConfig;
 
 
@@ -59,6 +60,18 @@ const validateReviews = [
         .withMessage('Stars must be an integer from 1 to 5'),
     handleValidationErrors
 ];
+
+const checkSpotExists = async (req, res, next) =>{
+    const spotId = req.params.spotId;
+        let spot = await Spot.findByPk(spotId);
+
+        if (!spot) {
+            res.status(404).json({
+                "message": "Spot couldn't be found"
+              })
+        }  
+    next();
+}
 
 // Create a Review for a Spot based on the Spot's id
 router.post(
@@ -217,6 +230,30 @@ router.get(
 );
 
 
+//Get all Reviews by a Spot's id
+router.get('/:spotId/reviews', 
+    checkSpotExists,
+    async (req, res) => {
+    const spotId = req.params.spotId;
+    const reviews = await Review.findAll({
+        where:{spotId: spotId},
+        include:[
+            {
+                model: User,
+                attributes:['id', 'firstName', 'lastName']
+            },
+            {
+                model: ReviewImage,
+                attributes: ['id', 'url']
+            }
+        ]  
+    })
+
+    res.status(200).json(
+        {Reviews: reviews});
+})
+
+
 //Get details of a Spot from an id
 router.get('/:spotId', async (req, res) =>{
     const spotId = req.params.spotId;
@@ -327,17 +364,7 @@ router.get('/', async (_req, res) => {
 //     next();
 // }
 
-const checkSpotExists = async (req, res, next) =>{
-    const spotId = req.params.spotId;
-        let spot = await Spot.findByPk(spotId);
 
-        if (!spot) {
-            res.status(404).json({
-                "message": "Spot couldn't be found"
-              })
-        }  
-    next();
-}
 
 router.put(
     '/:spotId',
