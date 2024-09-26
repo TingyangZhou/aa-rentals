@@ -3,11 +3,11 @@ const express = require('express')
 const bcrypt = require('bcryptjs');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Spot, SpotImage, Review, sequelize } = require('../../db/models');
+const { Spot, SpotImage, Review } = require('../../db/models');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { where } = require('sequelize');
+const { where, fn, col } = require('sequelize');
 
 const router = express.Router();
 
@@ -156,8 +156,8 @@ router.get(
             ],
             attributes: {
                 include: [
-                    [sequelize.fn('AVG', sequelize.col('Reviews.stars')),'avgRating'],
-                    [sequelize.col('SpotImages.url'), 'previewImage']
+                    [fn('AVG', col('Reviews.stars')),'avgRating'],
+                    [col('SpotImages.url'), 'previewImage']
                 ]
             },
             group: ['spot.id', 'SpotImages.id']
