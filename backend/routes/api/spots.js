@@ -20,7 +20,6 @@ const router = express.Router();
 router.use(cookieParser());
 
 const validateSpots = [
-    // Example
     check('address')
         .exists({ checkFalsy: true })
         .withMessage('Street address is required'),
@@ -49,7 +48,17 @@ const validateSpots = [
         .isFloat({min: 0})
         .withMessage('Price per day must be a positive number'),
     handleValidationErrors
-]   
+];
+
+const validateReviews = [
+    check('review')
+        .exists({ checkFalsy: true })
+        .withMessage('Review text is required'),
+    check('stars')
+        .isFloat({min: 1, max: 5})
+        .withMessage('Stars must be an integer from 1 to 5'),
+    handleValidationErrors
+];
 
 // Create a Spot
 router.post(
@@ -109,6 +118,55 @@ router.post(
     }
 );
 
+// Create a Review for a Spot based on the Spot's id
+router.post(
+    '/:spotId/reviews',
+    validateReviews,
+    requireAuth,
+    async (req, res) => {
+        const {review, stars} = req.body;
+
+        const userId = req.user.id;
+        const spotId = parseInt(req.params.spotId, 10);
+
+        const existingSpotId = await Spot.findByPk(spotId);
+        if (!existingSpotId) {
+            res.status(404);
+            return res.json({
+                message: "Spot couldn't be found"
+            });
+        }
+
+        const existingReview = await Review.findOne({
+            where: {userId, spotId}
+        });
+        if (existingReview) {
+            res.status(500);
+            return res.json({
+                message: "User already has a review for this spot"
+            });
+        }
+        
+        const spotReview = await Review.create({
+            userId,
+            spotId,
+            review,
+            stars,
+        });
+
+        res.status(201);
+        return res.json({
+            id: spotReview.id,
+            userId: spotReview.userId,
+            spotId: spotReview.spotId,
+            review: spotReview.review,
+            stars: spotReview.stars,
+            createdAt: spotReview.createdAt,
+            updatedAt: spotReview.updatedAt
+        });
+    }
+);
+
 // Get all Spots
 router.get('/', async (_req, res) => {
     const spots = await Spot.findAll({
@@ -155,8 +213,8 @@ router.get('/', async (_req, res) => {
     
 })
 
-//Get details of a Spot from an id
-router.get('/:spotId', async (req, res) =>{
+// Get details of a Spot from an id
+router.get('/spots/:spotId', async (req, res) =>{
     try{
         const spotId = req.params.spotId;
         let spot = await Spot.findByPk(spotId, {
@@ -202,7 +260,7 @@ router.get('/:spotId', async (req, res) =>{
     
 })
 
-//Get all Spots owned by the Current User
+// Get all Spots owned by the Current User
 router.get(
     '/current',
     requireAuth,
