@@ -26,6 +26,16 @@ git merge <your-branch-name>
 git push origin dev
 ```
 
+## Auto-Merging Conflict
+* Step 1: Click on 'Accept Both Changes'
+* Step 2: Save conflicted file changes
+* Step 3: 
+``` bash
+git add .
+git commit -m '<your-comment>'
+git push origin dev
+```
+
 ## Miscellaneous
 ``` bash
 git status
