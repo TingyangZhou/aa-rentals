@@ -21,9 +21,9 @@ const validateReviews = [
 ];
 
 const checkReviewExists = async (req, res, next) =>{
-    const reviewId = req.params.reviewId;
-        let review = await Spot.findByPk(reviewId);
-
+        const reviewId = req.params.reviewId;
+        let review = await Review.findByPk(reviewId);
+ 
         if (!review) {
             res.status(404).json({
                 "message": "Review couldn't be found"
@@ -109,6 +109,27 @@ router.put('/:reviewId',
         return next(err);
      }
     
+})
+
+// delete a review
+router.delete('/:reviewId', 
+    requireAuth,
+    checkReviewExists,
+    async (req, res, next) => {
+        const reviewId = req.params.reviewId;
+        const review = await Review.findByPk(reviewId);
+        let userId = req.user.id;
+      
+        if(userId === review.dataValues.userId){
+            await review.destroy();
+            res.status(200).json({
+                message: "Successfully deleted"
+            })
+         } else{
+            const err = new Error('Review must belong to the current user');
+            err.status = 403;
+            return next(err);
+         }
 })
 
 
