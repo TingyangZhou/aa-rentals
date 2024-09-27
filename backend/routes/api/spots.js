@@ -367,7 +367,6 @@ router.get('/', async (_req, res) => {
             spot.dataValues.avgRating = 0;
         }
         
-
         if (spot.SpotImages && spot.SpotImages.length > 0) {
             spot.dataValues.previewImage = spot.SpotImages[0].dataValues.url; 
         } else {
