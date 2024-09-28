@@ -175,7 +175,7 @@ router.post(
             name,
             description,
             price,
-        } = req.body;
+        } = req.body;        
 
         const ownerId = req.user.id;
         
@@ -192,7 +192,8 @@ router.post(
             price
         })
 
-        const safeSpot = {
+        res.status(201);
+        return res.json({
             id: spot.id,
             ownerId: spot.ownerId,
             address: spot.address,
@@ -205,17 +206,12 @@ router.post(
             description: spot.description,
             price: spot.price,
             createdAt: spot.createdAt,
-            updatedAt: spot.updatedAt,
-        };
-
-        await setTokenCookie(res, safeSpot);
-
-        res.status(201);
-        return res.json({
-            spot: safeSpot
+            updatedAt: spot.updatedAt
         });
     }
 );
+
+
 
 // Add an Image to a Spot based on the Spot's id
 router.post(
