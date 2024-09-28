@@ -251,7 +251,7 @@ router.post(
     }
 );
 
-//Get all Spots owned by the Current User
+// Get all Spots owned by the Current User
 router.get(
     '/current',
     requireAuth,
@@ -272,7 +272,7 @@ router.get(
             group: ['Spot.id', 'SpotImages.id']
         });
 
-        const safeSpots = spots.map(spot => ({
+        const allUserSpots = spots.map(spot => ({
             id: spot.id,
             ownerId: spot.ownerId,
             address: spot.address,
@@ -290,11 +290,9 @@ router.get(
             previewImage: spot.dataValues.previewImage
         }));
 
-        await setTokenCookie(res, safeSpots)
-
         res.status(200);
         return res.json({
-            Spots: safeSpots
+            Spots: allUserSpots
         });
     }
 );
