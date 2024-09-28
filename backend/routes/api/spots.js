@@ -189,29 +189,32 @@ router.post(
 
         const userId = req.user.id;
         const spotId = parseInt(req.params.spotId, 10);
+               
+        const existingSpot = await Spot.findByPk(spotId);
 
-        const existingSpotId = await Spot.findOne({
-            where: {id: spotId, ownerId: userId}
-        });
-        if (!existingSpotId) {
+        if (!existingSpot) {
             res.status(404);
             return res.json({
                 message: "Spot couldn't be found" // And needs to belong to user
             });
         }
-
-        const spotImage = await SpotImage.create({
-            spotId,
-            url,
-            preview
-        });
-
-        res.status(201);
-        return res.json({
-            id: spotImage.id,
-            url: spotImage.url,
-            preview: spotImage.preview
-        });
+        
+        if (userId === existingSpot.ownerId) {
+            const spotImage = await SpotImage.create({
+                spotId,
+                url,
+                preview
+            });
+    
+            res.status(201);
+            return res.json({
+                id: spotImage.id,
+                url: spotImage.url,
+                preview: spotImage.preview
+            });
+        } else{
+            res.status(403).json('Spot must belong to the current user')
+        }       
     }
 );
 
@@ -382,7 +385,7 @@ router.get('/', async (_req, res) => {
         // console.log(`\nspotId: `, spot.id)
 
     res.status(200).json(
-        {spots:spotsWithRating});
+        {Spots:spotsWithRating});
     
 })
 
