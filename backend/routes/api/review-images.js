@@ -16,13 +16,11 @@ const router = express.Router();
 router.delete(
     '/:imageId',
     requireAuth,
-    async (req, res) => {
+    async (req, res, next) => {
         const userId = req.user.id;
         const imageId = parseInt(req.params.imageId, 10);
 
-        const existingImage = await ReviewImage.findOne({
-            where: {id: imageId, userId}
-        });
+        const existingImage = await ReviewImage.findByPk(imageId);
         if (!existingImage) {
             res.status(404);
             return res.json({
@@ -30,12 +28,22 @@ router.delete(
             });
         }
 
-        await existingImage.destroy();
+        const review = await Review.findByPk(existingImage.reviewId);
 
-        res.status(200);
-        return res.json({
-            message: "Successfully deleted"
-        });
+        if(review.userId === userId){
+            await existingImage.destroy();
+
+            res.status(200);
+            return res.json({
+                message: "Successfully deleted"
+            });
+        } else{
+            const err = new Error("Review must belong to the current user");
+            err.status = 403;
+            return next(err);
+        }
+
+        
     }
 );
 

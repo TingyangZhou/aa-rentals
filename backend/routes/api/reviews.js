@@ -141,37 +141,44 @@ router.post(
         const userId = req.user.id;
         const reviewId = parseInt(req.params.reviewId, 10);
         
-        const existingReviewId = await Review.findOne({
-            where: {id: reviewId, userId}
-        });
-        if (!existingReviewId) {
+        const existingReview = await Review.findByPk(reviewId);
+        
+        if (!existingReview) {
             res.status(404);
             return res.json({
                 message: "Review couldn't be found" // And needs to belong to user
             });
         }
 
-        const imageCount = await ReviewImage.count({
-            where: {reviewId}
-        });
-        if (imageCount >= 10) {
-            res.status(403);
-            return res.json({
-                message: "Maximum number of images for this resource was reached"
+        if (existingReview.userId === userId) {
+            const imageCount = await ReviewImage.count({
+                where: {reviewId}
             });
+            if (imageCount >= 10) {
+                res.status(403);
+                return res.json({
+                    message: "Maximum number of images for this resource was reached"
+                });
+            }
+    
+            const reviewImage = await ReviewImage.create({
+                reviewId,
+                url
+            });
+    
+            res.status(201);
+            return res.json({
+                id: reviewImage.id,
+                url: reviewImage.url,
+            });
+        } else{
+            res.status(403).json('Review must belong to the current user')
         }
-
-        const reviewImage = await ReviewImage.create({
-            reviewId,
-            url
-        });
-
-        res.status(201);
-        return res.json({
-            id: reviewImage.id,
-            url: reviewImage.url,
-        });
+        
+    
     }
+
+        
 );
 
 module.exports = router;
