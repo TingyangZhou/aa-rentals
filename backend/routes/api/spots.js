@@ -192,22 +192,27 @@ router.post(
             price
         })
 
+        console.log('Data 1:', spot.dataValues);
+
         res.status(201);
-        return res.json({
-            id: spot.id,
-            ownerId: spot.ownerId,
-            address: spot.address,
-            city: spot.city,
-            state: spot.state,
-            country: spot.country,
-            lat: spot.lat,
-            lng: spot.lng,
-            name: spot.name,
-            description: spot.description,
-            price: spot.price,
-            createdAt: spot.createdAt,
-            updatedAt: spot.updatedAt
-        });
+        return res.json(
+            spot.dataValues
+                // {
+                // id: spot.id,
+                // ownerId: spot.dataValues.ownerId,
+                // address: spot.dataValues.address,
+                // city: spot.dataValues.city,
+                // state: spot.dataValues.state,
+                // country: spot.dataValues.country,
+                // lat: spot.dataValues.lat,
+                // lng: spot.dataValues.lng,
+                // name: spot.dataValues.name,
+                // description: spot.dataValues.description,
+                // price: spot.dataValues.price,
+                // createdAt: spot.dataValues.createdAt,
+                // updatedAt: spot.dataValues.updatedAt
+            // }
+        );
     }
 );
 
@@ -322,7 +327,7 @@ router.get('/:spotId/reviews',
 })
 
 
-//Get details of a Spot from an id
+// Get details of a Spot from an id
 router.get('/:spotId', async (req, res) =>{
     const spotId = req.params.spotId;
     //     console.log('\nspotId:', spotId,'\n');
@@ -359,10 +364,10 @@ router.get('/:spotId', async (req, res) =>{
         );
         
         if (reviewsCount !== 0){
-            let avgRating = totalStars/reviewsCount;
-            spot.dataValues.avgRating = avgRating;
+            let avgStarRating = totalStars/reviewsCount;
+            spot.dataValues.avgStarRating = avgStarRating;
         } else {
-            spot.dataValues.avgRating = 0;
+            spot.dataValues.avgStarRating = 0;
         }
         spot.dataValues.numReviews = reviewsCount;   
     
