@@ -1,4 +1,5 @@
 'use strict';
+let options = {};
 
 const { Review } = require('../models');
 const { Op } = require('sequelize'); 

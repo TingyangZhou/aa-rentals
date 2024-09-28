@@ -1,4 +1,5 @@
 'use strict';
+let options = {};
 
 const { SpotImage } = require('../models')
 const { Op } = require('sequelize'); 
