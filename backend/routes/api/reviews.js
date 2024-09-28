@@ -85,7 +85,6 @@ router.get('/current',
 
 
 // Edit a Review
-
 router.put('/:reviewId',
     requireAuth,
     checkReviewExists,
@@ -97,7 +96,7 @@ router.put('/:reviewId',
 
     if (review.userId === req.user.id){
         review.set({
-            "review": "This was an awesome spot!",
+            "review": "This was an awesome spot for testing edit reviews!",
             "stars": 5,
         })
         await review.save();
