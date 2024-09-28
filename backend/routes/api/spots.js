@@ -8,7 +8,7 @@ const { Spot, SpotImage, Review, User, ReviewImage } = require('../../db/models'
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
-const { where, fn, col } = require('sequelize');
+const { where, fn, col, Op } = require('sequelize');
 
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
@@ -58,6 +58,43 @@ const validateReviews = [
     check('stars')
         .isFloat({min: 1, max: 5})
         .withMessage('Stars must be an integer from 1 to 5'),
+    handleValidationErrors
+];
+
+
+const validateQuery = [
+    check('page')
+        .optional()
+        .isInt({ min: 1 })  
+        .withMessage('Page must be greater than or equal to 1'),
+    check('size')
+        .optional()
+        .isInt({min:2, max:20})
+        .withMessage('Size must be between 1 and 20'),
+    check('maxLat')
+        .optional()
+        .isFloat()
+        .withMessage('Maximum latitude is invalid'),
+    check('minLat')
+        .optional()
+        .isFloat()
+        .withMessage('Minimum latitude is invalid'),
+    check('maxLng')
+        .optional()
+        .isFloat()
+        .withMessage('Maximum longitude is invalid'),
+    check('minLng')
+        .optional()
+        .isFloat()
+        .withMessage('Minimum longitude is invalid'),
+    check('minPrice')
+        .optional()
+        .isFloat({min:0})
+        .withMessage('Minimum price must be greater than or equal to 0'),
+    check('maxPrice')
+        .optional()
+        .isFloat({min:0})
+        .withMessage('Maximum price must be greater than or equal to 0'),
     handleValidationErrors
 ];
 
@@ -233,7 +270,7 @@ router.get(
                     [col('SpotImages.url'), 'previewImage']
                 ]
             },
-            group: ['spot.id', 'SpotImages.id']
+            group: ['Spot.id', 'SpotImages.id']
         });
 
         const safeSpots = spots.map(spot => ({
@@ -340,18 +377,62 @@ router.get('/:spotId', async (req, res) =>{
 })
 
 
+// Get all Spots and Add Query Filter and Pagination
+router.get('/', validateQuery,
+    async (req, res) => {
+    
+    let where = {};
+    let pagination = {};
+    
+    let {page = 1, size = 20, minLat, maxLat, minLng, maxLng, minPrice, maxPrice} = req.query;
+    
+    page = parseInt(page);
+    size = parseInt(size);
+    minLat = parseFloat(minLat);
+    maxLat = parseFloat(maxLat);
+    minLng = parseFloat(minLng);
+    maxLng = parseFloat(maxLng);
+    minPrice = parseFloat(minPrice);
+    maxPrice = parseFloat(maxPrice);
+    
+    pagination.limit = size;
+    pagination.offset = size * (page - 1);
 
-// Get all Spots
-router.get('/', async (_req, res) => {
-    const spots = await Spot.findAll({
+    if (minLat && maxLat){
+        where.lat = {[Op.between]:[minLat, maxLat]};
+    } else if (minLat) {
+        where.lat = {[Op.gte]: minLat};
+    } else if(maxLat){
+        where.lat = {[Op.lte]: maxLat}
+    }
+
+    if (minLng && maxLng){
+        where.lng = {[Op.between]:[minLng, maxLng]};
+    } else if (minLng) {
+        where.lng = {[Op.gte]: minLng};
+    } else if(maxLng){
+        where.lng = {[Op.lte]: maxLng}
+    }
+
+    if (minPrice && maxPrice){
+        where.price = {[Op.between]:[minPrice, maxPrice]};
+    } else if (minPrice) {
+        where.price = {[Op.gte]: minPrice};
+    } else if(maxPrice){
+        where.price = {[Op.lte]: maxPrice}
+    }
+
+    const filteredSpots = await Spot.findAll({
+        where,
         include:[{
             model:SpotImage,
             where:{preview:true},
             required:false
-        }]
+        }],
+        ...pagination
     });
     
-    let spotsWithRating = await Promise.all(spots.map(async spot => {
+    let spotsWithRating = await Promise.all(filteredSpots.map(async spot => {
         let totalStars = await Review.sum(
             'stars',
             {where:{spotId:spot.id}}
@@ -381,8 +462,30 @@ router.get('/', async (_req, res) => {
 )
         // console.log(`\nspotId: `, spot.id)
 
-    res.status(200).json(
-        {spots:spotsWithRating});
+    const safeSpots = spotsWithRating.map(spot => ({
+        id: spot.id,
+        ownerId: spot.ownerId,
+        address: spot.address,
+        city: spot.city,
+        state: spot.state,
+        country: spot.country,
+        lat: spot.lat,
+        lng: spot.lng,
+        name: spot.name,
+        description: spot.description,
+        price: spot.price,
+        createdAt: spot.createdAt,
+        updatedAt: spot.updatedAt,
+        avgRating: spot.dataValues.avgRating,
+        previewImage: spot.dataValues.previewImage
+    }));
+
+    const Spots= {};
+    Spots.Spots = safeSpots;
+    Spots.page = page;
+    Spots.size = size;
+
+    res.status(200).json(Spots);
     
 })
 
@@ -473,7 +576,7 @@ router.delete('/:spotId',
      const spot = await Spot.findByPk(spotId)
 
      if (!spot) {
-        const err = new Error("Spot coundn't be found");
+        const err = new Error("Spot couldn't be found");
         err.status = 404;
         return next(err);
     }  
