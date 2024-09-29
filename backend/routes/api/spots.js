@@ -266,7 +266,7 @@ router.get(
         const spots = await Spot.findAll({
             where: {ownerId: userId},
             include: [
-                {model: Review},
+                {model: Review, attributes: []},
                 {model: SpotImage}
             ],
             attributes: {
