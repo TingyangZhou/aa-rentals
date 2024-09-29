@@ -275,7 +275,7 @@ router.get(
                     [col('SpotImages.url'), 'previewImage']
                 ]
             },
-            group: ['Spot.id', 'SpotImages.id']
+            group: ['Review.id', 'SpotImages.id']
         });
 
         const allUserSpots = spots.map(spot => ({
