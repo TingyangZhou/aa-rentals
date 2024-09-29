@@ -275,23 +275,23 @@ router.get(
                     [col('SpotImages.url'), 'previewImage']
                 ]
             },
-            group: ['Review.id', 'SpotImages.id']
+            group: ['Spot.id', 'SpotImages.id']
         });
 
         const allUserSpots = spots.map(spot => ({
-            id: spot.id,
-            ownerId: spot.ownerId,
-            address: spot.address,
-            city: spot.city,
-            state: spot.state,
-            country: spot.country,
-            lat: spot.lat,
-            lng: spot.lng,
-            name: spot.name,
-            description: spot.description,
-            price: spot.price,
-            createdAt: spot.createdAt,
-            updatedAt: spot.updatedAt,
+            id: spot.dataValues.id,
+            ownerId: spot.dataValues.ownerId,
+            address: spot.dataValues.address,
+            city: spot.dataValues.city,
+            state: spot.dataValues.state,
+            country: spot.dataValues.country,
+            lat: spot.dataValues.lat,
+            lng: spot.dataValues.lng,
+            name: spot.dataValues.name,
+            description: spot.dataValues.description,
+            price: spot.dataValues.price,
+            createdAt: spot.dataValues.createdAt,
+            updatedAt: spot.dataValues.updatedAt,
             avgRating: spot.dataValues.avgRating,
             previewImage: spot.dataValues.previewImage
         }));
