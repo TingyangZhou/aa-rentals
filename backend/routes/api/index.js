@@ -63,4 +63,15 @@ router.post('/test', function(req, res) {
 //   }
 // );
 
+// POST /api/test
+// router.post('/api/test', (req, res) => {
+//   console.log('Request Body:', req.body);
+
+//   res.json({
+//     message: 'Request successful!',
+//     requestBody: req.body
+//   });
+// });
+
+
 module.exports = router;

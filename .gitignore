@@ -3,6 +3,8 @@ node_modules
 build
 .DS_Store
 *.db
+resources
+aa15-react-redux-authenticate-me
 
 
 
