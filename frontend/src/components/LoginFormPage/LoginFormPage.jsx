@@ -45,29 +45,39 @@ function LoginFormPage() {
 
   return (
     <>
-      <h1>Log In</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Username or Email
-          <input
-            type="text"
-            value={credential}
-            onChange={(e) => setCredential(e.target.value)}
 
-          />
-        </label>
-        {errors.credential && <p style={{ color: 'red', fontStyle: 'italic' }}>{errors.credential}</p>}
-        <label>
-          Password
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+    
+      <form className='loginForm' onSubmit={handleSubmit}>
+        <h1>Log In</h1>
+        <div className='credential'>
+            <label>
+            Username or Email
+            <br></br>
+            <input
+                type="text"
+                value={credential}
+                onChange={(e) => setCredential(e.target.value)}
 
-          />
-        </label>
-        {errors.password && <p style={{ color: 'red', fontStyle: 'italic' }}>{errors.password}</p>}
-        {errors && <p>{errors.message}</p>}
+            />
+            </label>
+            {errors.credential && <p style={{ color: 'red', fontStyle: 'italic' }}>{errors.credential}</p>}
+        </div>
+
+        <div className='password'>
+            <label>
+            Password
+            <br></br>
+            <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+
+            />
+            </label>
+            {errors.password && <p style={{ color: 'red', fontStyle: 'italic' }}>{errors.password}</p>}
+            {errors && <p>{errors.message}</p>}
+        </div>
+        
         <button type="submit">Log In</button>
       </form>
     </>
