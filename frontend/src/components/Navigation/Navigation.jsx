@@ -3,13 +3,12 @@
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
-import './Navigation.css'
-import { useEffect } from 'react';
+import OpenModalButton from '../OpenModalButton';
+import LoginFormModal from '../LoginFormModal';
+import './Navigation.css';
 
-function Navigation({ isLoaded }){
-  const sessionUser = useSelector(state => state.session.user);
-  
-
+function Navigation({ isLoaded }) {
+  const sessionUser = useSelector((state) => state.session.user);
 
   const sessionLinks = sessionUser ? (
     <li>
@@ -18,7 +17,10 @@ function Navigation({ isLoaded }){
   ) : (
     <>
       <li>
-        <NavLink to="/login">Log In</NavLink>
+        <OpenModalButton
+          buttonText="Log In"
+          modalComponent={<LoginFormModal />}
+        />
       </li>
       <li>
         <NavLink to="/signup">Sign Up</NavLink>
@@ -27,18 +29,12 @@ function Navigation({ isLoaded }){
   );
 
   return (
-    <nav className='navigation'>
-        <ul>
-        <li>
-            <NavLink to="/">Home</NavLink>
-        </li>
-        {isLoaded && (
-            <div className="session-links">
-                {sessionLinks}
-            </div>)}
-        </ul>
-    </nav>
-    
+    <ul>
+      <li>
+        <NavLink to="/">Home</NavLink>
+      </li>
+      {isLoaded && sessionLinks}
+    </ul>
   );
 }
 
