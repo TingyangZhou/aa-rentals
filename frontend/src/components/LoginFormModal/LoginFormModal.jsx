@@ -4,7 +4,7 @@ import { useState } from 'react';
 import * as sessionActions from '../../store/session';
 import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
-import './LoginForm.css';
+import styles from './LoginForm.css';
 
 function LoginFormModal() {
   const dispatch = useDispatch();
@@ -23,37 +23,51 @@ function LoginFormModal() {
         if (data && data.errors) {
           setErrors(data.errors);
         }
+        else if(data?.message){
+          setErrors({message: data.message});
+        }
       });
   };
+  console.log('\nerrors:',errors)
 
   return (
     <>
+   
+    <form className='loginForm' onSubmit={handleSubmit}>
       <h1>Log In</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
+      <div className='credential'>
+      {errors && <p className='hint'>{errors.message}</p>}
+          <label>
           Username or Email
           <input
-            type="text"
-            value={credential}
-            onChange={(e) => setCredential(e.target.value)}
-            required
+              className='loginInput'
+              type="text"
+              value={credential}
+              onChange={(e) => setCredential(e.target.value)}
+
           />
-        </label>
-        <label>
+          </label>
+          {errors.credential && <p className='hint'>{errors.credential}</p>}
+      </div>
+
+      <div className='password'>
+          <label>
           Password
           <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
+              className='loginInput'
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+
           />
-        </label>
-        {errors.credential && (
-          <p>{errors.credential}</p>
-        )}
-        <button type="submit">Log In</button>
-      </form>
-    </>
+          </label>
+          {errors.password && <p className='hint'>{errors.password}</p>}
+          
+      </div>
+      
+      <button className='loginSubmitButton' type="submit">Log In</button>
+    </form>
+  </>
   );
 }
 

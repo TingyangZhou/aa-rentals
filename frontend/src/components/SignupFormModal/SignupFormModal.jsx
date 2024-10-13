@@ -1,14 +1,11 @@
-// frontend/src/components/SignupFormPage/SignupFormPage.jsx
-
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useModal } from '../../context/Modal';
 import * as sessionActions from '../../store/session';
 import './SignupForm.css';
 
-function SignupFormPage() {
+function SignupFormModal() {
   const dispatch = useDispatch();
-  const sessionUser = useSelector((state) => state.session.user);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -16,15 +13,12 @@ function SignupFormPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
-
-  if (sessionUser) return <Navigate to="/" replace={true} />;
+  const { closeModal } = useModal();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password === confirmPassword) {
       setErrors({});
-        
-
       return dispatch(
         sessionActions.signup({
           email,
@@ -33,12 +27,16 @@ function SignupFormPage() {
           lastName,
           password
         })
-      ).catch(async (res) => {
-        const data = await res.json();
-        if (data?.errors) {
-          setErrors(data.errors);
-        }
-      });
+      )
+        .then(closeModal)
+        .catch(async (res) => {
+          const data = await res.json();
+          
+          if (data?.errors) {
+            setErrors(data.errors);
+          }
+          
+        });
     }
     return setErrors({
       confirmPassword: "Confirm Password field must be the same as the Password field"
@@ -55,23 +53,25 @@ function SignupFormPage() {
       <label>
           First Name
           <input
+            className='signupInput'
             type="text"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
    
           />
         </label>
-        {errors.firstName && <p>{errors.firstName}</p>}
+        {errors.firstName && <p className='hint'>{errors.firstName}</p>}
         <label>
           Last Name
           <input
+            className='signupInput'
             type="text"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
        
           />
         </label>
-        {errors.lastName && <p>{errors.lastName}</p>}
+        {errors.lastName && <p className='hint'>{errors.lastName}</p>}
         <br></br>
         
 
@@ -79,23 +79,25 @@ function SignupFormPage() {
         <label>
           Email
           <input
+            className='signupInput'
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
        
           />
         </label>
-        {errors.email && <p>{errors.email}</p>}
+        {errors.email && <p className='hint'>{errors.email}</p>}
         <label>
           Username
           <input
+            className='signupInput'
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
       
           />
         </label>
-        {errors.username && <p>{errors.username}</p>}
+        {errors.username && <p className='hint'>{errors.username}</p>}
         <br></br>
         
 
@@ -103,28 +105,32 @@ function SignupFormPage() {
         <label>
           Password
           <input
+            className='signupInput'
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
       
           />
         </label>
-        {errors.password && <p>{errors.password}</p>}
+        {errors.password && <p className='hint'>{errors.password}</p>}
 
         <label>
           Confirm Password
           <input
+             className='signupInput'
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
     
           />
         </label>
-        {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
-        <button type="submit">Sign Up</button>
+        {errors.confirmPassword && <p className='hint'>{errors.confirmPassword}</p>}
+
+        <br></br>
+        <button className='signupSubmitButton' type="submit">Sign Up</button>
       </form>
     </>
   );
 }
 
-export default SignupFormPage;
+export default SignupFormModal;
