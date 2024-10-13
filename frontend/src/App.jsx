@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import LoginFormPage from './components/LoginFormPage';
 import SignupFormPage from './components/SignupFormPage';
+import Navigation from './components/Navigation';
 import * as sessionActions from './store/session';
 
 function Layout() {
@@ -19,8 +20,12 @@ function Layout() {
 
   return (
     <>
-      {isLoaded && <Outlet />}
+      <Navigation isLoaded ={isLoaded}/>
+      <>
+        {isLoaded && <Outlet />}
+      </>
     </>
+    
   );
 }
 
