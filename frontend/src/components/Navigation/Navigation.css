@@ -1,0 +1,36 @@
+* {
+    font-family: "Helvetica", sans-serif;
+  }
+
+  .navigation {
+    display: flex;
+    flex-direction:column;
+  }
+
+  ul{
+    list-style-type: none;
+    display: flex;
+    gap: 10px;
+    padding: 0;
+    margin: 0;
+
+  }
+
+
+
+  .session-links{
+    margin-left: auto;
+  }
+
+  .profile-dropdown {
+
+    display:flex;
+    flex-direction: column;
+  }
+
+  .hidden{
+    display: none;
+
+  }
+
+  
