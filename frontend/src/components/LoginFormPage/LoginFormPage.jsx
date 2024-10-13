@@ -18,21 +18,7 @@ function LoginFormPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors({});
-    let errorObj = {};
-    if (!credential.trim()) {
-        errorObj.credential = 'Username or email cannot be empty';
-    }
-    
-    if (!password.trimEnd()) {
-        errorObj.password = 'Password cannot be empty';
-    }
-
-    setErrors(errorObj);
-    if(Object.keys(errorObj).length !==0 ) {
-        setErrors(errorObj);
-        return;
-    }
-    
+   
     
     return dispatch(sessionActions.login({ credential, password })).catch(
         async (res) => {
