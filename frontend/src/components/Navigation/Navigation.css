@@ -2,6 +2,11 @@
     font-family: "Helvetica", sans-serif;
   }
 
+  .airbnb-logo{
+    width:150px;
+    height: auto;
+    cursor:pointer;
+  }
   .home-nav-bar {
     display: flex;
 
