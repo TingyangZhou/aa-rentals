@@ -37,6 +37,36 @@ module.exports = {
         userId: 3,
         review: 'Amazing stay!',
         stars: 5
+      },
+      {
+        spotId: 2,
+        userId: 2,
+        review: 'Amazing view and very comfortable stay!',
+        stars: 4
+      },
+      {
+        spotId: 3,
+        userId: 3,
+        review: 'Perfect location, but the amenities could be better.',
+        stars: 3
+      },
+      {
+        spotId: 3,
+        userId: 4,
+        review: 'A wonderful and peaceful retreat, loved the waterfront!',
+        stars: 5
+      },
+      {
+        spotId: 5,
+        userId: 5,
+        review: 'The cabin was cozy and the skiing was fantastic!',
+        stars: 5
+      },
+      {
+        spotId: 6,
+        userId: 6,
+        review: 'Great location in the city, but a bit noisy at night.',
+        stars: 4
       }
     ],{ validate: true })
   },

@@ -22,13 +22,33 @@ module.exports = {
 
     await SpotImage.bulkCreate([
       {spotId: 1,
-        url:'https://www.google.com/imgres?imgurl=https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?cs%3Dsrgb%26dl%3Dpexels-binyaminmellish-106399.jpg%26fm%3Djpg&tbnid=kdENxlNldMG6sM&vet=1&imgrefurl=https://www.pexels.com/search/houses/&docid=pOKaSh3YkKiy2M&w=5408&h=3605&source=sh/x/im/m1/1&kgs=e556ea0cc2d90162&shem=abme,trie',
+        url:'https://aarentalsbucket.s3.us-east-2.amazonaws.com/1.jpg',
         preview:true
 
       },
       {spotId: 2,
-        url:'https://images.app.goo.gl/J2T3764iNL8akcMW7',
+        url:'https://aarentalsbucket.s3.us-east-2.amazonaws.com/2.jpg',
         preview:true
+      },
+      {
+        spotId: 3,
+        url: 'https://aarentalsbucket.s3.us-east-2.amazonaws.com/3.jpeg',
+        preview: true
+      },
+      {
+        spotId: 4,
+        url: 'https://aarentalsbucket.s3.us-east-2.amazonaws.com/4.jpg',
+        preview: true
+      },
+      {
+        spotId: 5,
+        url: 'https://aarentalsbucket.s3.us-east-2.amazonaws.com/5.jpg',
+        preview: true
+      },
+      {
+        spotId: 6,
+        url: 'https://aarentalsbucket.s3.us-east-2.amazonaws.com/6.jpg',
+        preview: true
       }
     ],{ validate: true })
   },

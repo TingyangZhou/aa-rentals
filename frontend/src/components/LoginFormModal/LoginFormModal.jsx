@@ -12,11 +12,31 @@ function LoginFormModal() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
+ 
+  
+  const handleCredentialChange = (e) => {
+    const newCredential = e.target.value;
+    setCredential(newCredential)
+    if (newCredential.length < 4) {
+      setErrors({ credential: 'Username must be at least 4 characters' });
+    } else{
+      setErrors({ credential: '' });
+    }
+  }
+
+  const handlePasswordChange = (e) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword )
+    if (newPassword.length < 6){
+      setErrors({ password: 'Password must be at least 6 characters '})
+    }else {
+      setErrors({ password: ''});
+    }
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setErrors({});
-   
+    
     return dispatch(sessionActions.login({ credential, password }))
       .then(closeModal)
       .catch(async (res) => {
@@ -53,7 +73,7 @@ function LoginFormModal() {
               className='loginInput'
               type="text"
               value={credential}
-              onChange={(e) => setCredential(e.target.value)}
+              onChange={handleCredentialChange}
           />
           </label>
           {errors.credential && <p className='hint'>{errors.credential}</p>}
@@ -66,7 +86,7 @@ function LoginFormModal() {
               className='loginInput'
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={handlePasswordChange}
 
           />
           </label>

@@ -1,6 +1,4 @@
-* {
-    font-family: "Helvetica", sans-serif;
-  }
+
   
   .signupForm {
     background-color: #f5f5f5; /* Light grey background */
@@ -63,9 +61,9 @@
 
   .hint {
     color: red;
-    font-style: italic;
+    font-size: 12px;
+    font-weight: bold;
     text-align: left;
     margin: 0;
   }
-  
 

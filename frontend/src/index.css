@@ -1,1 +1,10 @@
 /* TODO: Add sitewide styles */
+  
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+button{
+  cursor:pointer
+}

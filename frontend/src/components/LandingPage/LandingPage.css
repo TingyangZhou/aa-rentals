@@ -1,0 +1,65 @@
+/* The parent container that will hold the list of spot tiles */
+.spotList {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 items per row */
+    gap: 20px; /* Add space between items */
+    padding: 20px;
+  }
+  
+  /* Styling for each spot item */
+  .spot-tile {
+    list-style-type: none;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+    transition: transform 0.2s;
+    cursor:pointer
+  }
+  
+  .spot-tile:hover {
+    transform: scale(1.05); 
+  }
+  
+  
+  .spot-image {
+    width: 100%; /* Ensure the image takes full width */
+    height: 200px; /* Set a fixed height for the image */
+    object-fit: cover; /* Ensure the image covers the container */
+  }
+  
+  .spot-info-wrapper {
+    padding: 10px;
+  }
+  
+  .spot-location-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .spot-location {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .rating {
+    color: #f5c518;
+    font-size: 14px;
+  }
+  
+  .spot-price {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+
+  @media (max-width: 600px){
+    .spotList {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 20px;
+      }
+  }
