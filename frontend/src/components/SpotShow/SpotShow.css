@@ -1,0 +1,77 @@
+/* frontend/src/components/SpotShow/SpotShow.css */
+
+.spot-name {
+    text-align: left;   
+}
+
+.container {
+    width: 100%;        /* The content fills the width of the screen */
+    max-width: 1000px;  /* But it won’t exceed 1000px */
+    margin: 0 auto;     /* Center the content */
+  }
+
+.spot-details-wrapper{
+    display:flex;
+}
+
+.host-discription-wrapper{
+    width: 70%;
+}
+
+.spot-host{
+    text-align: left;
+}
+
+
+
+.image-container{
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; 
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    /* border: 2px solid red; */
+}
+
+
+
+.preview-image {
+    width: 450px; 
+    height: 315px; 
+    padding-top:10px;
+    flex: 1;
+    object-fit: cover; 
+    border-radius: 5px;
+    /* border: 2px solid red; */
+  }
+
+  
+.other-images-wrapper{
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px; 
+    padding: 10px;
+    
+}
+
+.other-images {
+    width:100%;
+    height: 150px;
+    object-fit:cover;
+    border-radius: 5px;
+}
+
+.other-image-list{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.reserve-wrapper{
+    width:200px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}

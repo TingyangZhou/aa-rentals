@@ -31,13 +31,25 @@ const loadSpots = (spots) => {
     return res;
   }
 
-  //Fetch a single spot
-  export const fetchSingleSpot = (spotId) => async(dispatch) => {
-    const res = await fetch('api/spots/spotId');
-    const spot = await res.json();
-    dispatch(showSpot(spot));
-    return res;
-  }
+  //Fetch single spot
+  export const fetchSingleSpot = (spotId) => async (dispatch) => {
+    try {
+        const res = await fetch(`/api/spots/${spotId}`);
+
+        if (!res.ok) {
+            const error = await res.json(); 
+            throw error;
+        }
+
+        const spot = await res.json();
+        dispatch(showSpot(spot));
+        return res;
+    } catch (error) {
+        console.log('\nfetchError:', error)
+        throw error; // rethrow the error to handle it later
+    }
+};
+
 
 
   /** Reducer: */
@@ -45,13 +57,14 @@ const loadSpots = (spots) => {
   const spotsReducer = (state = {}, action) => {
     switch (action.type) {
         case(LOAD_SPOTS): {
-            let spots = {...state};
-            action.payload.forEach((spot) => spots[spot.id] = spot);
-            return spots;
+          let spots = {...state};
+          action.payload.forEach((spot) => spots[spot.id] = spot);
+          return spots;
             
         }
         case(SHOW_SPOT):{
-          
+          let spot = action.payload;
+          return {...state, [spot.id]:spot}
         }
         default:
             return state;

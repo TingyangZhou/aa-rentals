@@ -26,6 +26,26 @@ module.exports = {
         preview:true
 
       },
+      {spotId: 1,
+        url:'https://aarentalsbucket.s3.us-east-2.amazonaws.com/1-2.jpg',
+        preview:true
+
+      },
+      {spotId: 1,
+        url:'https://aarentalsbucket.s3.us-east-2.amazonaws.com/1-3.jpg',
+        preview:true
+
+      },
+      {spotId: 1,
+        url:'https://aarentalsbucket.s3.us-east-2.amazonaws.com/1-4.jpg',
+        preview:true
+
+      },
+      {spotId: 1,
+        url:'https://aarentalsbucket.s3.us-east-2.amazonaws.com/1-5.jpg',
+        preview:true
+
+      },
       {spotId: 2,
         url:'https://aarentalsbucket.s3.us-east-2.amazonaws.com/2.jpg',
         preview:true
