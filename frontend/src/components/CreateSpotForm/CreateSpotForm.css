@@ -1,0 +1,120 @@
+/* General form styling */
+.create-spot-form {
+    width: 400px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+  }
+  
+  .create-spot-form h1{
+    font-size: 1.5rem;
+    text-align: left;
+  }
+  .create-spot-form h2 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  
+  .create-spot-form p {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 20px;
+  }
+  
+  
+  
+  .city-state-wrapper {
+    display: flex;
+    gap: 20px;
+  }
+
+  .city {
+    flex: 2; /* City input takes up 3/4 of the space */
+    padding-right:20px;
+  }
+  
+  .state {
+    flex: 1; /* State input takes up 1/4 of the space */
+  }
+ 
+
+  .create-spot-form section {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+  }
+  
+
+  .create-spot-form .button-container {
+    text-align: center;
+  }
+  
+  .create-spot-form .create-spot-button {
+    padding: 10px 20px;
+    background-color: rgb(215, 125, 125);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .create-spot-form .create-spot-button:hover {
+    color: white;
+  }
+  
+  
+
+ 
+
+  /* Location section */
+  .form-location div,
+  .form-price div,
+  .form-photos div {
+    margin-bottom: 20px;
+  }
+  
+  .form-location label,
+  .form-price label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .form-location input,
+  .form-description textarea,
+  .form-title input,
+  .form-price input,
+  .form-photos input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+
+
+  /* Photos section */
+  .form-photos input[type='text'] {
+    margin-bottom: 10px;
+  }
+
+  .price-input-div{
+    display: flex;
+    align-items: center;
+  }
+
+  .price-input-div span {
+    margin-right: 10px; 
+  }
+
+  
+  
+  /* Textarea for description */
+  textarea {
+    height: 100px;
+    resize: none;
+    font-size: 1rem;
+  }
+
+  
+  

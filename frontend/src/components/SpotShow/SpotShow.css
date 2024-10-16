@@ -5,7 +5,7 @@
 }
 
 .container {
-    width: 100%;        /* The content fills the width of the screen */
+    width: 100%;       
     max-width: 1000px;  /* But it won’t exceed 1000px */
     margin: 0 auto;     /* Center the content */
   }

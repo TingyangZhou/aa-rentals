@@ -1,0 +1,46 @@
+/* frontend/src/components/Reviews/Reviews.css */
+
+.avgRating-wrapper{
+    display:flex;
+    gap: 20px;
+    padding-bottom:0px;
+}
+
+
+.reviews-wrapper {
+    border: 1px solid #ddd;;
+    display:flex;
+    flex-direction:column;
+    justify-content: space-between;
+    margin-left: 0;
+}
+
+.review{
+    list-style-type: none;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.reviews-container{
+    display:flex;
+    flex-direction:column;
+    justify-content: space-between;
+}
+
+.reviewer-first-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #000;
+}
+
+.review-date {
+    font-size: 1em;
+    color: #888;
+    margin: 5px 0;
+}
+
+.review p {
+    font-size: 1em;
+    color: #333;
+    line-height: 1.5;
+}

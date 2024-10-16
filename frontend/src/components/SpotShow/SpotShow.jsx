@@ -4,9 +4,10 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import * as spotsActions from '../../store/spots';
 import { useDispatch, useSelector } from 'react-redux';
+import Reviews from '../Reviews'
 import './SpotShow.css'
 
-const SpotShow = () => {
+const SpotShow = ({ isLoaded }) => {
     const { spotId } = useParams();
     const dispatch = useDispatch();
     
@@ -15,9 +16,10 @@ const SpotShow = () => {
     const currSpot = useSelector(state => state.spots[spotId]);
     const spotImageArr = currSpot?.SpotImages;
     const previewImage = spotImageArr?.length > 0 ? spotImageArr[0] : null; 
-    const otherImages = spotImageArr?.length > 1 ? spotImageArr.slice(1) : null; ;
+    const otherImages = spotImageArr?.length > 1 ? spotImageArr.slice(1) : null; 
 
     const numReviews = currSpot?.numReviews || 0;   
+    const ownerId = currSpot?.ownerId;
    
     useEffect(() => {
         setErrors({});
@@ -44,7 +46,7 @@ const SpotShow = () => {
                 <img className='preview-image' src ={previewImage?.url} alt={currSpot?.name} />
                 <div className='other-images-wrapper'>
                     {otherImages?.map(image => (
-                        <li className='other-image-list'><img
+                        <li className='other-image-list' key={image?.id}><img
                             src={image?.url} 
                             alt={currSpot?.name}
                             className='other-images'/></li>
@@ -61,8 +63,13 @@ const SpotShow = () => {
                 <div className='reserve-wrapper'>
                     <div className='price-review-wrapper'>
                         <div className="price">${currSpot?.price} <label>night</label></div>
-                        <p className='rating'><span>&#9733;</span>{currSpot?.avgStarRating ? currSpot?.avgStarRating.toFixed(1) : "New"}</p>
-                        <p>{numReviews} reviews</p>
+                        <p className='rating'>
+                            <span>&#9733;</span>
+                            {currSpot?.avgStarRating ? currSpot?.avgStarRating.toFixed(1) : "New"}{numReviews === 0 
+                            ? '':
+                            ` · ${numReviews} ${numReviews > 1 ? 'reviews' : 'review'}`}
+                        </p>
+                         
                     </div>
                     <button 
                         onClick={() => {alert('Feature coming soon')}}
@@ -73,7 +80,11 @@ const SpotShow = () => {
             </div>
            
             <div>
-                Reviews
+                <Reviews 
+                    spotId={spotId} 
+                    avgRating={currSpot?.avgStarRating} numReviews={numReviews} 
+                    isLoaded={isLoaded}
+                    ownerId={ownerId}/>
             </div>
         </div>
         )}
