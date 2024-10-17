@@ -10,7 +10,9 @@ import './LandingPage.css'
 function LandingPage () {
 
     const allSpots = useSelector(state => state.spots);
-    const allSpotsArr = Object.values(allSpots);
+    const allSpotsArr = Object.values(allSpots).sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
     
     const dispatch = useDispatch();
     

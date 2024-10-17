@@ -6,6 +6,23 @@
     padding-bottom:0px;
 }
 
+.post-review-button {
+    
+    background-color: #808080; 
+    color: white; /* Text color */
+    border: none; 
+    font-size: 16px;
+    padding: 10px 14px; 
+    text-align: left; /* Align text to the left */
+    display: block; 
+    width: fit-content; /* Make the width fit the content */
+    cursor: pointer; /* Change cursor to pointer */
+    border-radius: 5px; /* Optional: rounded corners */
+  }
+  
+  .post-review-button:hover {
+    background-color: #666666; /* Slightly darker gray on hover */
+  }
 
 .reviews-wrapper {
     border: 1px solid #ddd;;

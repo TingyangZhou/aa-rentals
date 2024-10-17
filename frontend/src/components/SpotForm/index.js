@@ -1,2 +1,2 @@
 import CreateSpotForm  from "./CreateSpotForm";
-export default CreateSpotForm;
+export {CreateSpotForm};

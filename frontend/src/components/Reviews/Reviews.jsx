@@ -1,6 +1,8 @@
 import * as reviewsActions from '../../store/reviews';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import OpenModalButton from '../OpenModalButton';
+import ReviewFormModal from '../ReviewFormModal';
 import './Reviews.css'
 
 
@@ -22,6 +24,13 @@ function Reviews({ spotId, avgRating, numReviews, isLoaded, ownerId }){
     }).sort((a,b)=>new Date(a.createdAt) - new Date(b.createdAt))
 
     let hasReview = (reviewArr.length !== 0)
+
+//check if the session user has posted review yet for the current spot
+    let reviewUserIdArr = reviewArr.map(review => review.User.id);
+    // console.log('reviewUserIdArr:', reviewUserIdArr)
+    let hasPostedReview = reviewUserIdArr.includes(sessionUser?.id)
+    console.log('hasPostedReview:', hasPostedReview)
+
     
     // console.log('reviewArr:', reviewArr);
   
@@ -52,18 +61,34 @@ function Reviews({ spotId, avgRating, numReviews, isLoaded, ownerId }){
                 </h2>
             </div>
            
-            <ul className='reviews-wrapper'>
-               {!hasReview ? (sessionUser !== null && isNotOwner && 'Be the first to post a review!'):
-                reviewArr.map(review => (
-                    <li className='review' key={review?.id}>
-                        <h3 className='reviewer-first-name'>{review?.User.firstName}</h3>
-                        <h4 className='review-date'>{new Date(review?.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</h4>
-                        <p> {review.review} </p>
 
-                    </li>
-                )
-                )} 
-            </ul>
+        {sessionUser !== null && isNotOwner && !hasPostedReview && 
+            <OpenModalButton
+                
+                buttonText="Post Your Review"
+                modalComponent={<ReviewFormModal />}
+                
+              />
+            }            
+                
+        {!hasReview ? (
+        sessionUser !== null && isNotOwner && <p>Be the first to post a review!</p>
+        ) : (
+        <ul className="reviews-wrapper">
+            {reviewArr.map((review) => (
+            <li className="review" key={review?.id}>
+                <h3 className="reviewer-first-name">{review?.User.firstName}</h3>
+                <h4 className="review-date">
+                {new Date(review?.createdAt).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                })}
+                </h4>
+                <p>{review.review}</p>
+            </li>
+            ))}
+        </ul>
+        )}
         </div>
     )
 }

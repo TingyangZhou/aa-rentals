@@ -67,6 +67,12 @@ module.exports = {
         userId: 6,
         review: 'Great location in the city, but a bit noisy at night.',
         stars: 4
+      },
+      {
+        spotId: 6,
+        userId: 1,
+        review: 'I had an absolutely amazing stay at this Airbnb! The place was incredibly clean, cozy, and felt just like home. The host was very accommodating and responsive, answering all my questions promptly and providing excellent recommendations for local restaurants and attractions.',
+        stars: 5
       }
     ],{ validate: true })
   },

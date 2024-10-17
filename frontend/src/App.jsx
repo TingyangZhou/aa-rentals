@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import { LandingPage } from './components/LandingPage';
 import SpotShow  from './components/SpotShow'
-import CreateSpotForm from './components/CreateSpotForm'
+import {CreateSpotForm} from './components/SpotForm'
 import * as sessionActions from './store/session';
 
 function Layout() {

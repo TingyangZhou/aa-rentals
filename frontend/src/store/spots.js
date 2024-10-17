@@ -1,6 +1,10 @@
+import { csrfFetch } from "./csrf";
+
 /** Action Type Constants: */
 const LOAD_SPOTS = "spots/LOAD_SPOTS";
-const SHOW_SPOT ="spots/SHOW_SPOT";
+const SHOW_SPOT = "spots/SHOW_SPOT";
+const UPDATE_SPOT = 'spots/UPDATE_SPOT'
+const ADD_IMAGE = 'images/ADD_IMAGE'
 
 
 
@@ -19,12 +23,27 @@ const loadSpots = (spots) => {
     }
   }
 
+  
+  const updateSpot = (spot) => {
+    return {
+      type: UPDATE_SPOT,
+      payload: spot
+    }
+  }
+
+  const addImage = (image) =>{
+    return {
+      type: ADD_IMAGE,
+      payload: image
+    }
+  }
+
 
   /** Thunk Action Creators: */
 
   //fetch all the spots
   export const fetchSpots=() => async(dispatch) => {
-    const res = await fetch('/api/spots');
+    const res = await fetch('/api/spots',);
     const spots = await res.json();
     dispatch(loadSpots(spots.Spots)); //this should give an array
 
@@ -45,14 +64,63 @@ const loadSpots = (spots) => {
         dispatch(showSpot(spot));
         return res;
     } catch (error) {
-        console.log('\nfetchError:', error)
         throw error; // rethrow the error to handle it later
     }
 };
 
 
+// create a new Spot
+export const writeSpot = data => async dispatch => {
+  try{
+    // console.log('fetchingSpot!!!')
+    const res = await csrfFetch(`/api/spots`, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    }); //end fetch
+    const newSpot = await res.json(); 
+    dispatch(updateSpot(newSpot)); 
+    // console.log('newSpot:', newSpot);
+    return newSpot;
+    
+  } catch(res){  
+    const data = await res.json();
+    const error = data.errors;
+    // console.log('res error:', error)
+    throw error; 
+  }
+  
+  
+};
 
-  /** Reducer: */
+
+// create a spotImage
+export const createSpotImage = (spotId, imageUrl) => async(dispatch) => {
+  try{
+    console.log('fetchingImage!!!')
+    const res = await csrfFetch(`/api/spots/${spotId}/images`, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({url:imageUrl, preview:true})
+    });
+    const newImage = await res.json();
+    dispatch(addImage(newImage));
+    console.log('newImage:', newImage);
+    return newImage;
+  }catch(res) {
+    const error = await res.json();
+    throw error;
+  }
+}
+
+
+
+
+  /** Reducers: */
 
   const spotsReducer = (state = {}, action) => {
     switch (action.type) {
@@ -66,9 +134,25 @@ const loadSpots = (spots) => {
           let spot = action.payload;
           return {...state, [spot.id]:spot}
         }
+        case(UPDATE_SPOT):{
+          let spot = action.payload;
+          return {...state, [spot.id]:spot}
+        }
+        
         default:
             return state;
     }
   }
 
-  export default spotsReducer;
+  const imagesReducer = (state = {}, action) => {
+    switch (action.type) {
+      case(ADD_IMAGE):{
+        let image = action.payload;;
+        return {...state, [image.id]:image};
+      }
+      default:
+        return state;
+}
+}
+
+  export {spotsReducer, imagesReducer};
