@@ -22,7 +22,7 @@ function LandingPage () {
     },[dispatch]);
 
     return (
-        <div>
+        <div className='page-container'>
             <ul className='spotList'>
                 {allSpotsArr.map(spot => (
                     <SpotIndexItem

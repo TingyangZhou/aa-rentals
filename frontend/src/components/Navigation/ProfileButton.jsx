@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { FaUserCircle } from 'react-icons/fa';
+import { IoMdMenu } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
 import * as sessionActions from '../../store/session';
 import OpenModalButton from '../OpenModalButton';
@@ -35,6 +36,10 @@ function ProfileButton({ user }) {
     return () => document.removeEventListener("click", closeMenu);
   }, [showMenu]);
 
+  const manageSpots = (e)=> {
+    navigate('/spots/current')
+  }
+
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
@@ -48,13 +53,16 @@ function ProfileButton({ user }) {
 
     <div className='dropdown-menu'>
       <button className='profile-button' onClick={toggleMenu}>
-        <FaUserCircle />
+        <IoMdMenu/><FaUserCircle />
       </button>
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
           <>
             <li className='user-info-list'>{`Hello, ${user.firstName}`}</li>
             <li className='user-info-list'>{user.email}</li>
+            <li >
+              <button className='manage-spots-button' onClick={manageSpots}>Manage Spots</button>
+            </li>
             <li >
               <button onClick={logout}>Log Out</button>
             </li>

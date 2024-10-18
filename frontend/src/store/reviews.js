@@ -1,5 +1,8 @@
+import { csrfFetch } from "./csrf";
+
 /** Action Type Constants: */
 const LOAD_REVIEWS = "spots/LOAD_REVIEWS";
+const ADD_REVIEW = 'spots/ADD_REVIEW'
 
 
 /**  Action Creators: */
@@ -9,6 +12,13 @@ const loadReviews = (reviews) => {
       payload: reviews
     };
   };
+
+  const addReview = (review) => {
+    return {
+        type: ADD_REVIEW,
+        payload: review
+    }
+  }
 
 
 /** Thunk Action Creators: */
@@ -29,6 +39,29 @@ export const fetchReviews = (spotId) => async(dispatch) => {
 
 }
 
+
+// Add review
+
+export const writeReview = (review, spotId) => async(dispatch) => {
+    try{
+       
+        const res = await csrfFetch (`/api/spots/${spotId}/reviews`, {
+            method: 'post',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(review)
+        });
+        const newReview = await res.json();
+        dispatch(addReview(newReview));
+
+    } catch(res){
+        const error = await res.json();
+        throw error;
+    }
+    
+}
+
 /** Reducer: */
 
 const reviewsReducer = (state = {}, action) => {
@@ -40,6 +73,10 @@ const reviewsReducer = (state = {}, action) => {
                 newState[review.id] =review;
             })
             return newState;            
+        }
+        case(ADD_REVIEW): {
+            const review = action.payload;
+            return {...state, [review.id]: review}; 
         }
         default:
             return state;

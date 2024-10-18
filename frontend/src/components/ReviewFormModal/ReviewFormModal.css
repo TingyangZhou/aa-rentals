@@ -1,0 +1,68 @@
+/* frontend/src/components/ReviewFormModal/ReviewFormModal.css */
+
+.review-form {
+    background-color: white; /* White background */
+    border-radius: 10px; /* Rounded corners for the form */
+    padding: 20px; /* Padding inside the form */
+    width: 400px; /* Set a fixed width for the form */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Slight shadow to add depth */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Arial, sans-serif; /* Change the font */
+}
+
+.review-form h1 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.review-text {
+    width: 100%; /* Make the textarea fill the width */
+    height: 100px; /* Set a fixed height for the textarea */
+    padding: 10px;
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px;
+    margin-bottom: 20px;
+    box-sizing: border-box; /* Ensures padding doesn’t increase width */
+    color: #666;
+}
+
+.review-text::placeholder {
+    color: #bbb; /* Light gray placeholder */
+}
+
+.reviewStars {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.reviewStars svg {
+    margin-right: 5px; /* Space between stars */
+}
+
+.reviewStars span {
+    font-size: 18px;
+    margin-left: 10px; /* Space between stars and 'Stars' text */
+}
+
+.submit-review-button {
+    background-color: #f0f0f0; /* Light gray background */
+    color: #333; /* Dark text */
+    border: 1px solid #ccc; /* Light border */
+    padding: 10px 20px; /* Padding for the button */
+    font-size: 16px;
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    width: 100%; /* Make the button fill the form width */
+    text-align: center; /* Center text in the button */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for the button */
+}
+
+.submit-review-button:hover {
+    background-color: #ddd; /* Darker gray on hover */
+}
+

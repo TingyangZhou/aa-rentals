@@ -5,6 +5,7 @@ const LOAD_SPOTS = "spots/LOAD_SPOTS";
 const SHOW_SPOT = "spots/SHOW_SPOT";
 const UPDATE_SPOT = 'spots/UPDATE_SPOT'
 const ADD_IMAGE = 'images/ADD_IMAGE'
+const SHOW_USER_SPOTS = 'spots/SHOW_USER_SPOTS'
 
 
 
@@ -23,6 +24,13 @@ const loadSpots = (spots) => {
     }
   }
 
+  const showUserSpots = (spot) =>{
+    return {
+      type:SHOW_USER_SPOTS,
+      payload: spot
+    }
+  }
+
   
   const updateSpot = (spot) => {
     return {
@@ -37,6 +45,8 @@ const loadSpots = (spots) => {
       payload: image
     }
   }
+
+ 
 
 
   /** Thunk Action Creators: */
@@ -99,7 +109,7 @@ export const writeSpot = data => async dispatch => {
 // create a spotImage
 export const createSpotImage = (spotId, imageUrl) => async(dispatch) => {
   try{
-    console.log('fetchingImage!!!')
+    // console.log('fetchingImage!!!')
     const res = await csrfFetch(`/api/spots/${spotId}/images`, {
       method: 'post',
       headers: {
@@ -109,7 +119,7 @@ export const createSpotImage = (spotId, imageUrl) => async(dispatch) => {
     });
     const newImage = await res.json();
     dispatch(addImage(newImage));
-    console.log('newImage:', newImage);
+    // console.log('newImage:', newImage);
     return newImage;
   }catch(res) {
     const error = await res.json();
@@ -117,6 +127,15 @@ export const createSpotImage = (spotId, imageUrl) => async(dispatch) => {
   }
 }
 
+//fetch spots owned by current user
+
+export const fetchUserSpots = () => async(dispatch) =>{
+  const res = await fetch('/api/spots/current');
+  const spots = await res.json();
+  dispatch(showUserSpots(spots.Spots));
+
+  return spots;  
+}
 
 
 
@@ -137,6 +156,12 @@ export const createSpotImage = (spotId, imageUrl) => async(dispatch) => {
         case(UPDATE_SPOT):{
           let spot = action.payload;
           return {...state, [spot.id]:spot}
+        }
+        case(SHOW_USER_SPOTS):{
+          let spots = {...state};
+          action.payload.forEach((spot) => spots[spot.id] = spot);
+          return spots;
+
         }
         
         default:

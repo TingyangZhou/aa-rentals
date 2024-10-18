@@ -6,10 +6,10 @@
     padding-bottom:0px;
 }
 
-.post-review-button {
+.reviews-container button {
     
     background-color: #808080; 
-    color: white; /* Text color */
+    color: white; 
     border: none; 
     font-size: 16px;
     padding: 10px 14px; 
@@ -20,8 +20,8 @@
     border-radius: 5px; /* Optional: rounded corners */
   }
   
-  .post-review-button:hover {
-    background-color: #666666; /* Slightly darker gray on hover */
+  .reviews-container button:hover {
+    background-color: red; /* Slightly darker gray on hover */
   }
 
 .reviews-wrapper {

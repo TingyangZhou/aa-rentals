@@ -14,6 +14,10 @@ const SpotShow = ({ isLoaded }) => {
     const [errors, setErrors] = useState({});
 
     const currSpot = useSelector(state => state.spots[spotId]);
+
+    const reviews = useSelector(state => state.reviews);
+    console.log('reviews:', reviews)
+
     const spotImageArr = currSpot?.SpotImages;
     const previewImage = spotImageArr?.length > 0 ? spotImageArr[0] : null; 
     const otherImages = spotImageArr?.length > 1 ? spotImageArr.slice(1) : null; 
@@ -23,16 +27,11 @@ const SpotShow = ({ isLoaded }) => {
    
     useEffect(() => {
         setErrors({});
-        const fetchSpot = async () => {
-            try {
-                await dispatch(spotsActions.fetchSingleSpot(spotId));
-            } catch (error) {
+        dispatch(spotsActions.fetchSingleSpot(spotId))
+            .catch((error) => {
                 setErrors(error);
-            }
-        };
-    
-        fetchSpot();
-    }, [dispatch, spotId]); // end useEffect
+            });
+    }, [dispatch, spotId, reviews]);
     
 
     return (

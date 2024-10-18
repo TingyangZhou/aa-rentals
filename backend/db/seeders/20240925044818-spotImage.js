@@ -69,6 +69,16 @@ module.exports = {
         spotId: 6,
         url: 'https://aarentalsbucket.s3.us-east-2.amazonaws.com/6.jpg',
         preview: true
+      },
+      {
+        spotId: 7,
+        url: 'https://aarentalsbucket.s3.us-east-2.amazonaws.com/7.jpg',
+        preview: true
+      },
+      {
+        spotId: 8,
+        url: 'https://aarentalsbucket.s3.us-east-2.amazonaws.com/8.jpg',
+        preview: true
       }
     ],{ validate: true })
   },

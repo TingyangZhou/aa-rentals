@@ -82,7 +82,31 @@ module.exports = {
         name: 'Urban Retreat',
         description: 'A chic condo in the heart of Chicago with stunning views of the lake and skyline.',
         price: 200.00,
-      }
+      },
+      {
+        ownerId: 1,
+        address: '101 Seaside Ln',
+        city: 'Santa Monica',
+        state: 'California',
+        country: 'United States',
+        lat: 34.01,
+        lng: -118.49,
+        name: 'Seaside Getaway',
+        description: 'A serene seaside getaway, steps away from the beach, with breathtaking ocean views.',
+        price: 350.00,
+      },
+      {
+        ownerId: 1,
+        address: '202 Bayview Dr',
+        city: 'Laguna Beach',
+        state: 'California',
+        country: 'United States',
+        lat: 33.54,
+        lng: -117.78,
+        name: 'Laguna Bay House',
+        description: 'A cozy bay house with private beach access, perfect for a relaxing coastal retreat.',
+        price: 500.00,
+      }      
       
     ], { validate: true });
   },

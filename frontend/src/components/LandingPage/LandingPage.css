@@ -1,4 +1,8 @@
 /* The parent container that will hold the list of spot tiles */
+.page-container{
+  max-width: 1024px;
+  margin: 0 auto;
+}
 .spotList {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* 4 items per row */

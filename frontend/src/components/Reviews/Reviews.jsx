@@ -6,32 +6,47 @@ import ReviewFormModal from '../ReviewFormModal';
 import './Reviews.css'
 
 
-function Reviews({ spotId, avgRating, numReviews, isLoaded, ownerId }){
+function Reviews({ spotId, avgRating, numReviews, ownerId }){
     const dispatch = useDispatch();
     const [ errors, setErrors ] = useState({});
-
-    
+    const [hasPostedReview, setHasPostedReview] = useState(false);
+ 
+    const [isNotOwner, setIsNotOwner] = useState(false);
+    const [ reviewUserIdArr, setReviewUserIdArr] = useState([]);
+      
     const sessionUser = useSelector(state => state.session.user);
-    let isNotOwner = (sessionUser?.id !== ownerId)
+    
 
     // console.log('\nsessionUser.id:', sessionUser.id)
     // console.log('\nisNotOwner:', isNotOwner)
  
-    const reviews = useSelector(state => state.reviews);
-    const allReviews = Object.values(reviews);
-    const reviewArr = allReviews.filter(review => {
+    const fetchedReviews = useSelector(state => state.reviews);
+    // console.log('fetched reviews:', fetchedReviews);
+   
+    const reviewArr =((Object.values(fetchedReviews)).filter(review => {
         return review?.spotId === +spotId;
-    }).sort((a,b)=>new Date(a.createdAt) - new Date(b.createdAt))
+    }).sort((a,b)=>new Date(b.createdAt) - new Date(a.createdAt)));
+    const hasReview =(reviewArr.length !== 0);
 
-    let hasReview = (reviewArr.length !== 0)
+   
+    useEffect(()=>{
+        if (reviewArr.length > 0){
+            setReviewUserIdArr(reviewArr.map(review => review?.User?.id));
+            setHasPostedReview(reviewUserIdArr.includes(sessionUser?.id));
 
-//check if the session user has posted review yet for the current spot
-    let reviewUserIdArr = reviewArr.map(review => review.User.id);
-    // console.log('reviewUserIdArr:', reviewUserIdArr)
-    let hasPostedReview = reviewUserIdArr.includes(sessionUser?.id)
-    console.log('hasPostedReview:', hasPostedReview)
+        // console.log('reviewerUserIdArr:', reviewUserIdArr);
+        // console.log('sessionUser?.id:', sessionUser?.id);
+    }
+ 
+    // console.log('hasPostedReview:', hasPostedReview)
+    },[fetchedReviews])
 
+    useEffect(()=>{
     
+        setIsNotOwner(sessionUser?.id !== ownerId);
+
+    },[sessionUser])
+
     // console.log('reviewArr:', reviewArr);
   
     
@@ -64,9 +79,8 @@ function Reviews({ spotId, avgRating, numReviews, isLoaded, ownerId }){
 
         {sessionUser !== null && isNotOwner && !hasPostedReview && 
             <OpenModalButton
-                
                 buttonText="Post Your Review"
-                modalComponent={<ReviewFormModal />}
+                modalComponent={<ReviewFormModal spotId={spotId}/>}
                 
               />
             }            
@@ -77,7 +91,7 @@ function Reviews({ spotId, avgRating, numReviews, isLoaded, ownerId }){
         <ul className="reviews-wrapper">
             {reviewArr.map((review) => (
             <li className="review" key={review?.id}>
-                <h3 className="reviewer-first-name">{review?.User.firstName}</h3>
+                <h3 className="reviewer-first-name">{review?.User?.firstName}</h3>
                 <h4 className="review-date">
                 {new Date(review?.createdAt).toLocaleDateString("en-US", {
                     year: "numeric",
