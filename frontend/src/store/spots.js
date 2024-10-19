@@ -6,6 +6,7 @@ const SHOW_SPOT = "spots/SHOW_SPOT";
 const UPDATE_SPOT = 'spots/UPDATE_SPOT'
 const ADD_IMAGE = 'images/ADD_IMAGE'
 const SHOW_USER_SPOTS = 'spots/SHOW_USER_SPOTS'
+const REMOVE_SPOT = 'spots/REMOVE_SPOT'
 
 
 
@@ -46,6 +47,13 @@ const loadSpots = (spots) => {
     }
   }
 
+
+  const removeSpot = (spotId) =>{
+    return {
+      type:REMOVE_SPOT,
+      payload:spotId
+    }
+  }
  
 
 
@@ -84,7 +92,7 @@ export const writeSpot = data => async dispatch => {
   try{
     // console.log('fetchingSpot!!!')
     const res = await csrfFetch(`/api/spots`, {
-      method: 'post',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -104,6 +112,48 @@ export const writeSpot = data => async dispatch => {
   
   
 };
+
+
+// Edit a spot
+
+export const editSpot = (data, spotId) => async dispatch => {
+  try{
+    // console.log('fetchingSpot!!!')
+    const res = await csrfFetch(`/api/spots/${spotId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    }); //end fetch
+    const updatedSpot = await res.json(); 
+    dispatch(updateSpot(updatedSpot)); 
+    // console.log('updatedSpot:', updatedSpot);
+      
+  } catch(res){  
+    const error = await res.json();
+    // console.log('res error:', error)
+    throw error; 
+  }
+  
+};
+
+
+// Delete a spot
+export const deleteSpot =(spotId) => async(dispatch) =>{
+  try { 
+    const res = await csrfFetch(`/api/spots/${spotId}`, {
+      method: 'DELETE'
+    });
+    const data = res.json();
+    dispatch(removeSpot(spotId));
+    return data;
+  } catch (error){
+      throw error;
+  }
+}
+
+
 
 
 // create a spotImage
@@ -163,6 +213,11 @@ export const fetchUserSpots = () => async(dispatch) =>{
           return spots;
 
         }
+        case(REMOVE_SPOT):{
+          let newState = {...state};
+          delete newState[action.payload];
+          return newState;
+        }
         
         default:
             return state;
@@ -172,9 +227,10 @@ export const fetchUserSpots = () => async(dispatch) =>{
   const imagesReducer = (state = {}, action) => {
     switch (action.type) {
       case(ADD_IMAGE):{
-        let image = action.payload;;
+        let image = action.payload;
         return {...state, [image.id]:image};
       }
+      
       default:
         return state;
 }

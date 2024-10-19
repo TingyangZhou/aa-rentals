@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import OpenModalButton from '../OpenModalButton';
 import ReviewFormModal from '../ReviewFormModal';
+import ConfirmDeleteReviewModal from './ConfirmDeleteReviewModal.jsx'
 import './Reviews.css'
 
 
@@ -35,7 +36,8 @@ function Reviews({ spotId, avgRating, numReviews, ownerId }){
             setHasPostedReview(reviewUserIdArr.includes(sessionUser?.id));
 
         // console.log('reviewerUserIdArr:', reviewUserIdArr);
-        // console.log('sessionUser?.id:', sessionUser?.id);
+        // console.log('sessionUser.id:', sessionUser?.id);
+        // console.log('ownerId:', ownerId)
     }
  
     // console.log('hasPostedReview:', hasPostedReview)
@@ -45,7 +47,7 @@ function Reviews({ spotId, avgRating, numReviews, ownerId }){
     
         setIsNotOwner(sessionUser?.id !== ownerId);
 
-    },[sessionUser])
+    },[sessionUser, ownerId])
 
     // console.log('reviewArr:', reviewArr);
   
@@ -54,7 +56,7 @@ function Reviews({ spotId, avgRating, numReviews, ownerId }){
         setErrors({});
         const fetchReviews = async () =>{
             try {
-                await dispatch(reviewsActions.fetchReviews(spotId));
+                dispatch(reviewsActions.fetchReviews(spotId));
             } catch(error){
                 setErrors(error)
             }
@@ -99,6 +101,12 @@ function Reviews({ spotId, avgRating, numReviews, ownerId }){
                 })}
                 </h4>
                 <p>{review.review}</p>
+                {sessionUser !==null 
+                  && sessionUser.id === review.userId 
+                  && <OpenModalButton
+                  buttonText="Delete"
+                  modalComponent={<ConfirmDeleteReviewModal reviewId={review?.id}/>}
+            />}
             </li>
             ))}
         </ul>

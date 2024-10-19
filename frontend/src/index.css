@@ -6,6 +6,13 @@ button:disabled {
   }
 
 button{
-  cursor:pointer
+  cursor:pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease; 
+  
 }
 
+button:hover{
+  transform: scale(1.02); /* Slightly enlarge the button */
+  text-decoration: underline;
+  
+}
