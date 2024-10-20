@@ -39,8 +39,8 @@ const UpdateSpotForm = () => {
   const [address, setAddress] = useState(currSpot?.address);
   const [city, setCity] = useState(currSpot?.city);
   const [state, setState] = useState(currSpot?.state);
-  const [latitude, setLatitude] = useState(currSpot?.lat);
-  const [longitude, setLongitude] = useState(currSpot?.lng);
+  const [lat, setLat] = useState(currSpot?.lat);
+  const [lng, setLng] = useState(currSpot?.lng);
   const [description, setDescription] = useState(currSpot?.description)
   const [spotName, setSpotName] = useState(currSpot?.name);
   const [price, setPrice] = useState(currSpot?.price);
@@ -54,6 +54,16 @@ const UpdateSpotForm = () => {
 
     let validationError = {};
 
+    
+    const validationItems = {country, address, city, state, lat, lng, spotName, price};
+    Object.keys(validationItems).forEach(key => {
+      const value = validationItems[key];
+      console.log(key, value);
+      if(!value || value?.length === 0){
+        validationError[key]=`${key} is required`;
+      }
+    })
+
     if (description?.length < 30) {
       validationError.description = 'Description needs 30 or more characters';
     }
@@ -62,9 +72,9 @@ const UpdateSpotForm = () => {
 
 
     // If there are validation errors, stop form submission
-    // if (Object.keys(validationError).length > 0) {
-    //   return;
-    // }
+    if (Object.keys(validationError).length > 0) {
+      return;
+    }
   
     
       const updatedSpot = {
@@ -75,8 +85,8 @@ const UpdateSpotForm = () => {
             name: spotName,
             description,
             price,
-            lat:latitude,
-            lng:longitude
+            lat,
+            lng
           }
 
       console.log('updated Spot:', updatedSpot);
@@ -169,8 +179,8 @@ const UpdateSpotForm = () => {
               type="number"
               step="0.0001"  
               placeholder='Latitude'
-              onChange={(e) => setLatitude(e.target.value)}
-              value={latitude}
+              onChange={(e) => setLat(e.target.value)}
+              value={lat}
             />
           </label>
            
@@ -180,8 +190,8 @@ const UpdateSpotForm = () => {
               type="number"
               step="0.0001"  
               placeholder='Longitude'
-              onChange={(e) => setLongitude(e.target.value)}
-              value={longitude}
+              onChange={(e) => setLng(e.target.value)}
+              value={lng}
             />
           </label>
         </div>

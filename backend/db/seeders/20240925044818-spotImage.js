@@ -50,9 +50,37 @@ module.exports = {
         url:'https://aarentalsbucket.s3.us-east-2.amazonaws.com/2.jpg',
         preview:true
       },
+      {spotId: 2,
+        url:'https://aarentalsbucket.s3.us-east-2.amazonaws.com/2.jpg',
+        preview:true
+      },
+      {spotId: 2,
+        url:'https://aarentalsbucket.s3.us-east-2.amazonaws.com/2.jpg',
+        preview:true
+      },
       {
         spotId: 3,
         url: 'https://aarentalsbucket.s3.us-east-2.amazonaws.com/3.jpeg',
+        preview: true
+      },
+      {
+        spotId: 3,
+        url: 'https://aarentalsbucket.s3.us-east-2.amazonaws.com/3.jpeg',
+        preview: true
+      },
+      {
+        spotId: 3,
+        url: 'https://aarentalsbucket.s3.us-east-2.amazonaws.com/3.jpeg',
+        preview: true
+      },
+      {
+        spotId: 4,
+        url: 'https://aarentalsbucket.s3.us-east-2.amazonaws.com/4.jpg',
+        preview: true
+      },
+      {
+        spotId: 4,
+        url: 'https://aarentalsbucket.s3.us-east-2.amazonaws.com/4.jpg',
         preview: true
       },
       {
@@ -66,8 +94,53 @@ module.exports = {
         preview: true
       },
       {
+        spotId: 5,
+        url: 'https://aarentalsbucket.s3.us-east-2.amazonaws.com/5.jpg',
+        preview: true
+      },
+      {
+        spotId: 5,
+        url: 'https://aarentalsbucket.s3.us-east-2.amazonaws.com/5.jpg',
+        preview: true
+      },
+      {
         spotId: 6,
         url: 'https://aarentalsbucket.s3.us-east-2.amazonaws.com/6.jpg',
+        preview: true
+      },
+      {
+        spotId: 6,
+        url: 'https://aarentalsbucket.s3.us-east-2.amazonaws.com/6.jpg',
+        preview: true
+      },
+      {
+        spotId: 6,
+        url: 'https://aarentalsbucket.s3.us-east-2.amazonaws.com/6.jpg',
+        preview: true
+      },
+      {
+        spotId: 6,
+        url: 'https://aarentalsbucket.s3.us-east-2.amazonaws.com/6.jpg',
+        preview: true
+      },
+      {
+        spotId: 6,
+        url: 'https://aarentalsbucket.s3.us-east-2.amazonaws.com/6.jpg',
+        preview: true
+      },
+      {
+        spotId: 7,
+        url: 'https://aarentalsbucket.s3.us-east-2.amazonaws.com/7.jpg',
+        preview: true
+      },
+      {
+        spotId: 7,
+        url: 'https://aarentalsbucket.s3.us-east-2.amazonaws.com/7.jpg',
+        preview: true
+      },
+      {
+        spotId: 7,
+        url: 'https://aarentalsbucket.s3.us-east-2.amazonaws.com/7.jpg',
         preview: true
       },
       {

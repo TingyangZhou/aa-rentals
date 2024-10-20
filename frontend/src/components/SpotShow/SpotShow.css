@@ -12,10 +12,13 @@
 
 .spot-details-wrapper{
     display:flex;
+    
 }
 
 .host-discription-wrapper{
     width: 70%;
+    padding-right:20px;
+    /* border: 1px solid red; */
 }
 
 .spot-host{
@@ -70,8 +73,63 @@
     margin: 0;
 }
 
-.reserve-wrapper{
-    width:200px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-}
+.reserve-wrapper {
+    border: 2px solid black; /* Border around the whole component */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px;
+    width: 300px; /* You can adjust this as per the requirement */
+    box-sizing: border-box; /* Ensure padding is included in width */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content horizontally */
+  }
+  
+  /* Wrapper for price and reviews */
+  .price-review-wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 100%; /* Ensures full width inside the wrapper */
+    margin-bottom: 10px;
+  }
+  
+  /* Price styling */
+  .price {
+    font-size: 24px;
+    font-weight: bold;
+    color: black;
+  }
+  
+  .price label {
+    font-size: 16px;
+    font-weight: normal;
+    color: #333;
+  }
+  
+  /* Rating styling */
+  .rating {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: black;
+  }
+  
+   
+  
+  /* Reserve button styling */
+  .reserve-button {
+    background-color: #FF5A5F; /* Red background */
+    color: white; /* White text */
+    border: 2px solid black; /* Black border */
+    padding: 15px;
+    font-size: 16px;
+    width: 100%; /* Button takes full width */
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition */
+  }
+  
+  .reserve-button:hover {
+    background-color: #FF7A7F; /* Lighter red on hover */
+    transform: scale(1.05); /* Slight scale effect on hover */
+  }

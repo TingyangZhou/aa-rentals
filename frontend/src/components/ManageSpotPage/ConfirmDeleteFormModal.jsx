@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import * as spotsActions from '../../store/spots';
 import { useModal } from '../../context/Modal';
@@ -26,15 +26,18 @@ function ConfirmDeleteFormModal({spotId}) {
     }
 
     return (
-        <form className='confirm-delete-form'>
+        <form data-testid='delete-spot-modal' className='confirm-delete-form'>
             
             <h1>Confirm Delete</h1>
             <p>Are you sure you want to remove this spot 
             from the listings?</p>
-            <button className='yes-button'
+            <button 
+                 data-testid='confirm-delete-spot-button'
+                 className='yes-button'
                  onClick={handleDeleteClick}
             >Yes (Delete Spot)</button>
             <button 
+                data-testid='cancel-delete-spot-button'
                 className='no-button'
                 onClick={handleKeepClick}
             >No (Keep Spot)</button>

@@ -14,8 +14,8 @@ export default function SpotForm({ newSpot, formType }) {
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
-  const [latitude, setLatitude] = useState();
-  const [longitude, setLongitude] = useState();
+  const [lat, setLat] = useState();
+  const [lng, setLng] = useState();
   const [description, setDescription] = useState('');
   const [spotName, setSpotName] = useState('');
   const [price, setPrice] = useState();
@@ -40,13 +40,47 @@ export default function SpotForm({ newSpot, formType }) {
 
     let validationError = {};
 
+    const validationItems = {
+      Country:country, 
+      Address:address, 
+      City: city, 
+      State: state,  
+      Name: spotName
+    };
+    Object.keys(validationItems).forEach(key => {
+      const value = validationItems[key];
+
+      // console.log(key, ':', value);
+      if(!value || value === undefined){
+        validationError[key.toLowerCase()]=`${key} is required`;
+      }
+    })
+    // console.log('validationError:',validationError)
+
+    if (!lat) {
+      validationError.lat = 'Latitude is required';
+    }
+
+    if (!lng) {
+      validationError.lng = 'Longitude is required';
+    }
+
+    if (!price) {
+      validationError.price = 'Price per night is required';
+    }
+
+    if (price <= 0) {
+      validationError.price = 'Price must be a positive number';
+    }
+   
+
     if (description.length < 30) {
       validationError.description = 'Description needs 30 or more characters';
     }
 
   
     if (previewImage.length === 0) {
-      validationError.previewImage = 'Preview image is required.';
+      validationError.previewImage = 'Preview Image URL is required';
     }
 
     if (previewImage.length !== 0 && !validateExtension(previewImage)) {
@@ -68,14 +102,15 @@ export default function SpotForm({ newSpot, formType }) {
     }
 
     setErrors(validationError);
+  
 
     let otherImageArr = [imageUrl1, imageUrl2, imageUrl3, imageUrl4];
 
 
     // If there are validation errors, stop form submission
-    // if (Object.keys(validationError).length > 0) {
-    //   return;
-    // }
+    if (Object.keys(validationError).length > 0) {
+      return;
+    }
   
       if (formType === 'Create Spot') {
         
@@ -87,14 +122,15 @@ export default function SpotForm({ newSpot, formType }) {
             name: spotName,
             description,
             price,
-            lat:latitude,
-            lng:longitude
+            lat,
+            lng
           }
 
         //   console.log('newSpot:', newSpot)
         try {
             // First dispatch: create the spot
             const spot = await dispatch(spotsActions.writeSpot(newSpot)); // Wait for spot to be created
+            console.log('spot:', spot);
             if (spot && spot.id) {
                 try {
                   // Second dispatch: create the spotImage
@@ -105,6 +141,8 @@ export default function SpotForm({ newSpot, formType }) {
                         await dispatch(spotsActions.createSpotImage(spot.id, image));
                       }
                     }
+                    if(spot) navigate(`/spots/${spot?.id}`);
+
 
                 } catch (error) {
                     setErrors({ message: error.message });
@@ -117,42 +155,37 @@ export default function SpotForm({ newSpot, formType }) {
             setErrors(prevError => ({ ...prevError, ...error }));
             return;
         }
-    
-       
-    
-        // Only navigate after both the spot and image have been successfully created
-        navigate(`/`);
-
+      
 
   } //end if
 }; //end handleSubmit
 
   return (
-    <form onSubmit={handleSubmit} className='create-spot-form'>
-      <h1>Create a new Spot</h1>
+    <form data-testid='create-spot-form' onSubmit={handleSubmit} className='create-spot-form'>
+      <h1 data-testid='form-title' >Create a New Spot</h1>
 
-      <section className='form-location'>
-        <h2>Where's your place located</h2>
-        <p>Guests will only get your exact address once they booked a reservation.</p>
+      <section data-testid='section-1' className='form-location'>
+        <h2 data-testid='section-1-heading'>Where&apos;s your place located?</h2>
+        <p data-testid='section-1-caption'>Guests will only get your exact address once they booked a reservation.</p>
         <div>
           <label>
             Country
-            <input
+            <input data-testid='spot-location'
               type='text'
               placeholder='Country'
               onChange={(e) => setCountry(e.target.value)}
               value={country}
             />
           </label>
-          {errors?.country&& <p className='hint'>{errors.country}</p>}
+          {errors?.country && <p className='hint'>{errors.country}</p>}
         </div>
 
         <div>
           <label>
             Street Address
-            <input
+            <input data-testid='spot-location'
               type='text'
-              placeholder='Address'
+              placeholder='Street Address'
               onChange={(e) => setAddress(e.target.value)}
               value={address}
             />
@@ -164,7 +197,7 @@ export default function SpotForm({ newSpot, formType }) {
         <div className='city-state-wrapper'>
           <label className='city'>
             City
-            <input
+            <input data-testid='spot-location'
               type='text'
               placeholder='City'
               onChange={(e) => setCity(e.target.value)}
@@ -174,7 +207,7 @@ export default function SpotForm({ newSpot, formType }) {
            
           <label className='state'>
             State
-            <input
+            <input data-testid='spot-location'
               type='text'
               placeholder='State'
               onChange={(e) => setState(e.target.value)}
@@ -192,8 +225,8 @@ export default function SpotForm({ newSpot, formType }) {
               type="number"
               step="0.0001"  
               placeholder='Latitude'
-              onChange={(e) => setLatitude(e.target.value)}
-              value={latitude}
+              onChange={(e) => setLat(e.target.value)}
+              value={lat}
             />
           </label>
            
@@ -203,8 +236,8 @@ export default function SpotForm({ newSpot, formType }) {
               type="number"
               step="0.0001"  
               placeholder='Longitude'
-              onChange={(e) => setLongitude(e.target.value)}
-              value={longitude}
+              onChange={(e) => setLng(e.target.value)}
+              value={lng}
             />
           </label>
         </div>
@@ -214,9 +247,9 @@ export default function SpotForm({ newSpot, formType }) {
 
       
 
-      <section className='form-description'>
-        <h2>Describe your place to guests</h2>
-        <p>
+      <section data-testid='section-2' className='form-description'>
+        <h2 data-testid='section-2-heading'>Describe your place to guests</h2>
+        <p data-testid='section-2-caption'>
           Mention the best features of your space, any special amenities like fast wifi or parking,
           and what you love about the neighborhood.
         </p>
@@ -228,9 +261,9 @@ export default function SpotForm({ newSpot, formType }) {
         {errors?.description && <p className='hint'>{errors.description}</p>}
       </section>
 
-      <section className='form-title'>
-        <h2>Create a title for your spot</h2>
-        <p>Catch guests' attention with a spot title that highlights what makes your place special.</p>
+      <section data-testid='section-3' className='form-title'>
+        <h2 data-testid='section-3-heading'>Create a title for your spot</h2>
+        <p data-testid='section-3-caption'>Catch guests' attention with a spot title that highlights what makes your place special.</p>
         <input
           type='text'
           placeholder='Name of your spot'
@@ -240,9 +273,9 @@ export default function SpotForm({ newSpot, formType }) {
         {errors?.name&& <p className='hint'>{errors.name}</p>}
       </section>
 
-      <section className='form-price'>
-        <h2>Set a base price for your spot</h2>
-        <p>Competitive pricing can help your listing stand out and rank higher in search results.</p>
+      <section data-testid='section-4' className='form-price'>
+        <h2 data-testid='section-4-heading'>Set a base price for your spot</h2>
+        <p data-testid='section-4-caption'>Competitive pricing can help your listing stand out and rank higher in search results.</p>
         <div className='price-input-div'>
           <span>$</span>
           <input
@@ -257,9 +290,9 @@ export default function SpotForm({ newSpot, formType }) {
         
       </section>
 
-      <section className='form-photos'>
-        <h2>Liven up your spot with photos</h2>
-        <p>Submit a link to at least one photo to publish your spot.</p>
+      <section data-testid='section-5' className='form-photos'>
+        <h2 data-testid='section-5-heading'>Liven up your spot with photos</h2>
+        <p data-testid='section-5-caption'> Submit a link to at least one photo to publish your spot.</p>
         <div>
           <input
             type='text'
@@ -308,7 +341,7 @@ export default function SpotForm({ newSpot, formType }) {
         </div>
       </section>
       <div className='button-container'>
-        <button className='create-spot-button'>Create Spot</button>
+        <button type='submit' className='create-spot-button'>Create Spot</button>
       </div>
 
      

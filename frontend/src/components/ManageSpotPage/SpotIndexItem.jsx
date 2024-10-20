@@ -10,7 +10,7 @@ const SpotIndexItem = ({spot}) => {
  
 
     return (
-        <div className='spot-container'>
+        <div data-testid='user-spots' className='spot-container'>
             <Link to={`/spots/${spot?.id}`}>
                 <li className='manage-spot-tile' title={spot?.name}>
                     <img

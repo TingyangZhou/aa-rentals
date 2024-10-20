@@ -1,6 +1,6 @@
 // frontend/src/components/Navigation/Navigation.jsx
 
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
 import './Navigation.css';
@@ -16,24 +16,24 @@ function Navigation({ isLoaded }) {
   
   return (
     <nav className='home-nav-bar'>
-      <ul className='home'>
-        <li >
-          <NavLink to="/">
-            <img
-              src={airbnbLogo}
-              alt='Airbnb Logo'
-              className='airbnb-logo'
-            />
-          </NavLink>
-        </li>
-      </ul>
+       
+      <NavLink to="/">
+        <img data-testid='logo'
+          src={airbnbLogo}
+          alt='Airbnb Logo'
+          className='airbnb-logo'
+        />
+      </NavLink>  
 
       <div className='button-session-links-wrapper'>
-        <button 
-          className={buttonClassName}
-          onClick={() => navigate('/spots/new')}>
-          Create a New Spot
-        </button>
+        <Link to='/spots/new'>
+            <button 
+            data-testid='create-new-spot-button'
+            className={buttonClassName}>
+            Create a New Spot
+          </button>
+        </Link>
+        
         
         <ul className='session-links'>
           {isLoaded && <ProfileButton user={sessionUser} />}

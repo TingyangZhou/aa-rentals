@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import * as reviewsActions from '../../store/reviews';
 import { useModal } from '../../context/Modal';
@@ -26,12 +26,14 @@ function ConfirmDeleteReviewModal({reviewId}) {
     }
 
     return (
-        <form className='confirm-delete-form'>
+        <form data-testid='delete-review-modal' className='confirm-delete-form'>
             
             <h1>Confirm Delete</h1>
             <p>Are you sure you want to remove this review?</p>
-            <button className='yes-button'
-                 onClick={handleDeleteClick}
+            <button 
+                data-testid='confirm-delete-review-button' 
+                className='yes-button'
+                onClick={handleDeleteClick}
             >Yes (Delete Review)</button>
             <button 
                 className='no-button'

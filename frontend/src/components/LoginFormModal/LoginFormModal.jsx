@@ -62,7 +62,7 @@ function LoginFormModal() {
   return (
     <>
    
-    <form className='loginForm' onSubmit={handleSubmit}>
+    <form data-testid='login-modal' className='loginForm' onSubmit={handleSubmit}>
       <h1>Log In</h1>
 
       <div className='credential'>
@@ -70,6 +70,7 @@ function LoginFormModal() {
           <label>
           Username or Email
           <input
+              data-testid='credential-input'
               className='loginInput'
               type="text"
               value={credential}
@@ -83,6 +84,7 @@ function LoginFormModal() {
           <label>
           Password
           <input
+              data-testid='password-input'
               className='loginInput'
               type="password"
               value={password}
@@ -95,12 +97,15 @@ function LoginFormModal() {
       </div>
       
       <button 
+      data-testid='login-button'
       className='loginSubmitButton' 
       type="submit"
       disabled={credential.length < 4 || password.length < 6}
       >Log In</button>
 
-      <label onClick={handleDemoLogin}
+      <label 
+        data-testid='demo-user-login'
+        onClick={handleDemoLogin}
         className='demo-login' 
       >Log in as Demo User</label>
 

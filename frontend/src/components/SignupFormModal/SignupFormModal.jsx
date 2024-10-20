@@ -101,12 +101,13 @@ function SignupFormModal() {
 
   return (
     <>
-      <form className="signupForm" onSubmit={handleSubmit}>
+      <form data-testid='sign-up-form' className="signupForm" onSubmit={handleSubmit}>
         <h1>Sign Up</h1>
 
         <label>
           First Name
           <input
+            data-testid='first-name-input'
             className="signupInput"
             type="text"
             value={firstName}
@@ -119,6 +120,7 @@ function SignupFormModal() {
         <label>
           Last Name
           <input
+            data-testid='last-name-input'
             className="signupInput"
             type="text"
             value={lastName}
@@ -131,6 +133,7 @@ function SignupFormModal() {
         <label>
           Email
           <input
+            data-testid='email-input'
             className="signupInput"
             type="email"
             value={email}
@@ -138,11 +141,12 @@ function SignupFormModal() {
             required
           />
         </label>
-        {errors.email && <p className="hint">{errors.email}</p>}
+        {errors.email && <p data-testid='email-error-message' className="hint">{errors.email}</p>}
 
         <label>
           Username
           <input
+            data-testid='username-input'
             className="signupInput"
             type="text"
             value={username}
@@ -150,11 +154,12 @@ function SignupFormModal() {
             required
           />
         </label>
-        {errors.username && <p className="hint">{errors.username}</p>}
+        {errors.username && <p data-testid='username-error-message' className="hint">{errors.username}</p>}
 
         <label>
           Password
           <input
+            data-testid='password-input'
             className="signupInput"
             type="password"
             value={password}
@@ -167,6 +172,7 @@ function SignupFormModal() {
         <label>
           Confirm Password
           <input
+            data-testid='confirm-password-input'
             className="signupInput"
             type="password"
             value={confirmPassword}
@@ -177,6 +183,7 @@ function SignupFormModal() {
         {errors.confirmPassword && <p className="hint">{errors.confirmPassword}</p>}
 
         <button
+          data-testid='form-sign-up-button'
           className="signupSubmitButton"
           type="submit"
           disabled={

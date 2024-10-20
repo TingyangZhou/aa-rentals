@@ -23,9 +23,9 @@ function LandingPage () {
 
     return (
         <div className='page-container'>
-            <ul className='spotList'>
+            <ul data-testid='spots-list' className='spotList'>
                 {allSpotsArr.map(spot => (
-                    <SpotIndexItem
+                    <SpotIndexItem 
                         spot={spot}
                         key={spot.id}
                     />

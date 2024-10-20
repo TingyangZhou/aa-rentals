@@ -16,7 +16,8 @@ function ManageSpotPage(){
     const sessionUser = useSelector(state => state.session.user)
     // console.log('sessionUser:', sessionUser);
 
-    const spotsByCurrentUser = spotsArr.filter(spot => spot.ownerId === sessionUser.id)
+    const spotsByCurrentUser = spotsArr.filter(spot => spot.ownerId === sessionUser.id).sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 
     useEffect(() => {
       dispatch(spotsActions.fetchUserSpots());

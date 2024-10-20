@@ -44,7 +44,7 @@ function ProfileButton({ user }) {
     e.preventDefault();
     dispatch(sessionActions.logout());
     setShowMenu(false);
-    navigate('/')
+
   };
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
@@ -52,16 +52,19 @@ function ProfileButton({ user }) {
   return (
 
     <div className='dropdown-menu'>
-      <button className='profile-button' onClick={toggleMenu}>
+      <button data-testid="user-menu-button" className='profile-button' onClick={toggleMenu}>
         <IoMdMenu/><FaUserCircle />
       </button>
-      <ul className={ulClassName} ref={ulRef}>
+      <ul data-testid='user-dropdown-menu' className={ulClassName} ref={ulRef}>
         {user ? (
           <>
             <li className='user-info-list'>{`Hello, ${user.firstName}`}</li>
             <li className='user-info-list'>{user.email}</li>
             <li >
-              <button className='manage-spots-button' onClick={manageSpots}>Manage Spots</button>
+              <button
+                data-testid='manage-spots-link'
+                className='manage-spots-button' 
+                onClick={manageSpots}>Manage Spots</button>
             </li>
             <li >
               <button onClick={logout}>Log Out</button>

@@ -85,7 +85,7 @@ function ReviewFormModal({spotId}){
       
 
     return (
-        <form onSubmit ={handleSubmit} className='review-form'>
+        <form data-testid='review-modal' onSubmit ={handleSubmit} className='review-form'>
             <h1>How was your stay?</h1>
             {errors?.message && <p className='hint'>{errors?.message}</p>}
             {errors?.review && <p className='hint'>{errors?.review}</p>}
@@ -97,7 +97,10 @@ function ReviewFormModal({spotId}){
             />
            
            {errors?.stars && <p className='hint'>{errors?.stars}</p>}
-            <div className='reviewStars' style={{ display: 'flex' }}>
+            <div 
+                data-testid='review-star-clickable'
+                className='reviewStars' 
+                style={{ display: 'flex' }}>
                
                 {[...Array(5)].map((_, index) => (
                         <StarIcon 

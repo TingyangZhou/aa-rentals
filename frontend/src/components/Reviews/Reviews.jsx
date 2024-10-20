@@ -68,8 +68,8 @@ function Reviews({ spotId, avgRating, numReviews, ownerId }){
     return(
         <div className='reviews-container'>
             <br></br>
-            <div className='avgRating-wrapper'>
-                <h2 className='review-rating'>
+            <div data-testid='reviews-heading' className='avgRating-wrapper'>
+                <h2 data-testid='review-count' className='review-rating'>
                     <span> &#9733; </span> 
                     {avgRating ? avgRating.toFixed(1) : "New"} {numReviews === 0 
                     ? '' 
@@ -81,6 +81,7 @@ function Reviews({ spotId, avgRating, numReviews, ownerId }){
 
         {sessionUser !== null && isNotOwner && !hasPostedReview && 
             <OpenModalButton
+                data-testid='review-button'
                 buttonText="Post Your Review"
                 modalComponent={<ReviewFormModal spotId={spotId}/>}
                 
@@ -90,20 +91,21 @@ function Reviews({ spotId, avgRating, numReviews, ownerId }){
         {!hasReview ? (
         sessionUser !== null && isNotOwner && <p>Be the first to post a review!</p>
         ) : (
-        <ul className="reviews-wrapper">
+        <ul data-testid='review-list' className="reviews-wrapper">
             {reviewArr.map((review) => (
-            <li className="review" key={review?.id}>
+            <li data-testid='review-item' className="review" key={review?.id}>
                 <h3 className="reviewer-first-name">{review?.User?.firstName}</h3>
-                <h4 className="review-date">
-                {new Date(review?.createdAt).toLocaleDateString("en-US", {
+                <h4 data-testid='review-date' className="review-date">
+                    {new Date(review?.createdAt).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "long",
                 })}
                 </h4>
-                <p>{review.review}</p>
+                <p data-testid='review-text'>{review.review}</p>
                 {sessionUser !==null 
                   && sessionUser.id === review.userId 
                   && <OpenModalButton
+                  data-testid='review-button'
                   buttonText="Delete"
                   modalComponent={<ConfirmDeleteReviewModal reviewId={review?.id}/>}
             />}
