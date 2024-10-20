@@ -23,7 +23,7 @@
   }
 
 .edit-spot-buttons{
-  margin-top: 10px;
+  margin-top: auto;
   display:flex;
   gap:10px;
 
@@ -37,6 +37,7 @@
   font-size: 16px; 
   cursor: pointer; 
   border-radius: 5px; 
+  
 }
 
 .spot-container{
