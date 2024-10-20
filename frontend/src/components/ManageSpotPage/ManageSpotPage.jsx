@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import * as spotsActions from '../../store/spots';
 import { useDispatch, useSelector } from 'react-redux';
 

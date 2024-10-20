@@ -21,13 +21,13 @@ function ConfirmDeleteReviewModal({reviewId}) {
         
     }
 
-    const handleKeepClick = (e) => {
+    const handleKeepClick = () => {
         closeModal();
     }
 
     return (
         <form data-testid='delete-review-modal' className='confirm-delete-form'>
-            
+             {errors?.message && <p className='hint'>{errors.message}</p>}
             <h1>Confirm Delete</h1>
             <p>Are you sure you want to remove this review?</p>
             <button 

@@ -10,38 +10,26 @@ import './Reviews.css'
 function Reviews({ spotId, avgRating, numReviews, ownerId }){
     const dispatch = useDispatch();
     const [ errors, setErrors ] = useState({});
-    const [hasPostedReview, setHasPostedReview] = useState(false);
  
     const [isNotOwner, setIsNotOwner] = useState(false);
-    const [ reviewUserIdArr, setReviewUserIdArr] = useState([]);
-      
     const sessionUser = useSelector(state => state.session.user);
     
 
-    // console.log('\nsessionUser.id:', sessionUser.id)
+    console.log('\nsessionUser.id:', sessionUser.id)
     // console.log('\nisNotOwner:', isNotOwner)
  
     const fetchedReviews = useSelector(state => state.reviews);
-    // console.log('fetched reviews:', fetchedReviews);
    
     const reviewArr =((Object.values(fetchedReviews)).filter(review => {
         return review?.spotId === +spotId;
     }).sort((a,b)=>new Date(b.createdAt) - new Date(a.createdAt)));
     const hasReview =(reviewArr.length !== 0);
-
-   
-    useEffect(()=>{
-        if (reviewArr.length > 0){
-            setReviewUserIdArr(reviewArr.map(review => review?.User?.id));
-            setHasPostedReview(reviewUserIdArr.includes(sessionUser?.id));
-
-        // console.log('reviewerUserIdArr:', reviewUserIdArr);
-        // console.log('sessionUser.id:', sessionUser?.id);
-        // console.log('ownerId:', ownerId)
+  
+    let hasPostedReview = false;
+    if (reviewArr.length > 0){
+        hasPostedReview = reviewArr.some(review => review?.userId === sessionUser?.id);
     }
- 
-    // console.log('hasPostedReview:', hasPostedReview)
-    },[fetchedReviews])
+        console.log('reviewArr:', reviewArr);
 
     useEffect(()=>{
     
@@ -49,9 +37,7 @@ function Reviews({ spotId, avgRating, numReviews, ownerId }){
 
     },[sessionUser, ownerId])
 
-    // console.log('reviewArr:', reviewArr);
-  
-    
+
     useEffect(()=>{
         setErrors({});
         const fetchReviews = async () =>{
@@ -67,6 +53,7 @@ function Reviews({ spotId, avgRating, numReviews, ownerId }){
 
     return(
         <div className='reviews-container'>
+              {errors?.message && <p className='hint'>{errors.message}</p>}
             <br></br>
             <div data-testid='reviews-heading' className='avgRating-wrapper'>
                 <h2 data-testid='review-count' className='review-rating'>
@@ -80,13 +67,13 @@ function Reviews({ spotId, avgRating, numReviews, ownerId }){
            
 
         {sessionUser !== null && isNotOwner && !hasPostedReview && 
-            <OpenModalButton
-                data-testid='review-button'
-                buttonText="Post Your Review"
-                modalComponent={<ReviewFormModal spotId={spotId}/>}
-                
-              />
-            }            
+        <OpenModalButton
+            data-testid='review-button'
+            buttonText="Post Your Review"
+            modalComponent={<ReviewFormModal spotId={spotId}/>}
+            
+            />
+        }            
                 
         {!hasReview ? (
         sessionUser !== null && isNotOwner && <p>Be the first to post a review!</p>

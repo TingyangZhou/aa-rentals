@@ -36,7 +36,7 @@ function ProfileButton({ user }) {
     return () => document.removeEventListener("click", closeMenu);
   }, [showMenu]);
 
-  const manageSpots = (e)=> {
+  const manageSpots = ()=> {
     navigate('/spots/current')
   }
 

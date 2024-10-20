@@ -70,7 +70,7 @@ const loadSpots = (spots) => {
 
   //Fetch single spot
   export const fetchSingleSpot = (spotId) => async (dispatch) => {
-    try {
+
         const res = await fetch(`/api/spots/${spotId}`);
 
         if (!res.ok) {
@@ -81,9 +81,7 @@ const loadSpots = (spots) => {
         const spot = await res.json();
         dispatch(showSpot(spot));
         return res;
-    } catch (error) {
-        throw error; // rethrow the error to handle it later
-    }
+    
 };
 
 
@@ -141,16 +139,14 @@ export const editSpot = (data, spotId) => async dispatch => {
 
 // Delete a spot
 export const deleteSpot =(spotId) => async(dispatch) =>{
-  try { 
+
     const res = await csrfFetch(`/api/spots/${spotId}`, {
       method: 'DELETE'
     });
     const data = res.json();
     dispatch(removeSpot(spotId));
     return data;
-  } catch (error){
-      throw error;
-  }
+
 }
 
 

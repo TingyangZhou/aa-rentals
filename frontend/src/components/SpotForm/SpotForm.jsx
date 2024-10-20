@@ -1,15 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import * as spotsActions from '../../store/spots';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import './SpotForm.css';
 
 export default function SpotForm({ newSpot, formType }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const sessionUser = useSelector((state) => state.session.user);
-
+ 
   const [country, setCountry] = useState('');
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
@@ -263,7 +262,7 @@ export default function SpotForm({ newSpot, formType }) {
 
       <section data-testid='section-3' className='form-title'>
         <h2 data-testid='section-3-heading'>Create a title for your spot</h2>
-        <p data-testid='section-3-caption'>Catch guests' attention with a spot title that highlights what makes your place special.</p>
+        <p data-testid='section-3-caption'>Catch guests&apos; attention with a spot title that highlights what makes your place special.</p>
         <input
           type='text'
           placeholder='Name of your spot'

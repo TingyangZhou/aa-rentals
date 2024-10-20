@@ -1,6 +1,5 @@
 
-import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { useModal } from '../../context/Modal';
+import { Link, useNavigate } from 'react-router-dom';
 import './ManageSpotPage.css'
 import OpenModalButton from '../OpenModalButton';
 import ConfirmDeleteFormModal from './ConfirmDeleteFormModal';'./ConfirmDeleteFormModal.jsx'
@@ -32,7 +31,7 @@ const SpotIndexItem = ({spot}) => {
             <div className='edit-spot-buttons'>
                 <button 
                     className='spot-update-button'
-                    onClick={(e)=>{
+                    onClick={()=>{
                         navigate(`/spots/${spot?.id}/edit`)}}
                 
                 >Update</button>
