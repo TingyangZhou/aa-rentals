@@ -15,7 +15,7 @@ function Reviews({ spotId, avgRating, numReviews, ownerId }){
     const sessionUser = useSelector(state => state.session.user);
     
 
-    console.log('\nsessionUser.id:', sessionUser.id)
+    // console.log('\nsessionUser.id:', sessionUser?.id)
     // console.log('\nisNotOwner:', isNotOwner)
  
     const fetchedReviews = useSelector(state => state.reviews);
@@ -32,8 +32,7 @@ function Reviews({ spotId, avgRating, numReviews, ownerId }){
         console.log('reviewArr:', reviewArr);
 
     useEffect(()=>{
-    
-        setIsNotOwner(sessionUser?.id !== ownerId);
+        if (sessionUser)  setIsNotOwner(sessionUser?.id !== ownerId);
 
     },[sessionUser, ownerId])
 

@@ -55,14 +55,38 @@ const UpdateSpotForm = () => {
     let validationError = {};
 
     
-    const validationItems = {country, address, city, state, lat, lng, spotName, price};
+    const validationItems = {
+      Country:country, 
+      Address:address, 
+      City: city, 
+      State: state,  
+      Name: spotName
+    };
     Object.keys(validationItems).forEach(key => {
       const value = validationItems[key];
-      console.log(key, value);
-      if(!value || value?.length === 0){
-        validationError[key]=`${key} is required`;
+
+      // console.log(key, ':', value);
+      if(!value || value === undefined){
+        validationError[key.toLowerCase()]=`${key} is required`;
       }
     })
+    // console.log('validationError:',validationError)
+
+    if (!lat && lat !==0) {
+      validationError.lat = 'Latitude is required';
+    }
+
+    if (!lng && lng !==0) {
+      validationError.lng = 'Longitude is required';
+    }
+
+    if (!price) {
+      validationError.price = 'Price per night is required';
+    }
+
+    if (price <= 0) {
+      validationError.price = 'Price must be a positive number';
+    }
 
     if (description?.length < 30) {
       validationError.description = 'Description needs 30 or more characters';
@@ -199,7 +223,6 @@ const UpdateSpotForm = () => {
         {errors?.lng && <p className='hint'>{errors.lng}</p>}
       </section>
 
-      
 
       <section className='form-description'>
         <h2>Describe your place to guests</h2>

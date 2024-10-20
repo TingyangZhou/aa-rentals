@@ -26,7 +26,7 @@ function ProfileButton({ user }) {
     if (!showMenu) return;
 
     const closeMenu = (e) => {
-      if (!ulRef.current.contains(e.target)) {
+      if (!ulRef?.current?.contains(e.target)) {
         setShowMenu(false);
       }
     };
@@ -44,6 +44,7 @@ function ProfileButton({ user }) {
     e.preventDefault();
     dispatch(sessionActions.logout());
     setShowMenu(false);
+    navigate('/')
 
   };
 

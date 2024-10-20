@@ -39,13 +39,13 @@ module.exports = {
         stars: 5
       },
       {
-        spotId: 2,
+        spotId: 3,
         userId: 2,
         review: 'Amazing view and very comfortable stay!',
         stars: 4
       },
       {
-        spotId: 3,
+        spotId: 4,
         userId: 3,
         review: 'Perfect location, but the amenities could be better.',
         stars: 3
@@ -57,13 +57,13 @@ module.exports = {
         stars: 5
       },
       {
-        spotId: 5,
+        spotId: 6,
         userId: 5,
         review: 'The cabin was cozy and the skiing was fantastic!',
         stars: 5
       },
       {
-        spotId: 6,
+        spotId: 7,
         userId: 6,
         review: 'Great location in the city, but a bit noisy at night.',
         stars: 4

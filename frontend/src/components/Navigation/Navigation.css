@@ -37,6 +37,7 @@
   .home-nav-bar {
     display: flex;
     justify-content: space-between;
+    position:relative;
     max-width: 1024px;
     margin:0 auto;
     border-bottom: 2px solid rgb(236, 233, 233);
@@ -65,28 +66,28 @@
 
 .profile-button {
   background: none;
-  margin-left:auto;
-  border: none;
-  cursor: pointer;
-  font-size: 24px; 
-  display: flex;
-  
-  align-items: center;
-  padding-top:24px;
-  padding-left:25px;
-
- 
+  border: 2px solid black; /* for the border around the circle */
+  border-radius: 40%; /* makes it a circle */
+  display: inline-flex; /* centers the icons */
+  align-items: center; /* vertically centers icons */
+  justify-content: center;
+  gap:5px;
+  margin-top:20px;
+  margin-left:20px;
+  padding: 7px;
 }
 
-.profile-dropdown-menu {
-  position:relative;
+.profile-button svg {
+  font-size: 20px; /* adjust icon size */
+  color: black; /* adjust icon color */
 }
+
 
 .profile-dropdown {
 
   margin-top: 5px; 
-  position: absolute; 
-  z-index: 1000; 
+
+
   background-color: white;
   border: 1px solid #ccc;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -100,7 +101,7 @@
   align-items: center;
 
   position: absolute;
-  right:120px;
+  right:30px;
   /* border: 1px solid red; */
   
 

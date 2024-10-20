@@ -15,6 +15,7 @@ function SignupFormModal() {
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
+
   // Real-time validation for input changes
   const handleFirstNameChange = (e) => {
     setFirstName(e.target.value);
@@ -76,6 +77,7 @@ function SignupFormModal() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password === confirmPassword) {
+      
       setErrors({});
       return dispatch(
         sessionActions.signup({
@@ -93,6 +95,8 @@ function SignupFormModal() {
             setErrors(data.errors);
           }
         });
+        
+        
     }
     return setErrors({
       confirmPassword: "Confirm Password field must be the same as the Password field",

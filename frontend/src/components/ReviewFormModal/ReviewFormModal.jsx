@@ -13,8 +13,9 @@ function ReviewFormModal({spotId}){
     const { closeModal } = useModal();
 
     const [review, setReview] = useState('');
-    const [rating, setRating] = useState('');
+    const [rating, setRating] = useState(0);
     const [errors, setErrors] = useState({});
+    const [ hoverRating, setHoverRating ] = useState(0);
 
    
     console.log('\nspotId:', spotId)
@@ -27,14 +28,14 @@ function ReviewFormModal({spotId}){
     
     // Dispatch the action and handle the result or errors
     dispatch(reviewsActions.writeReview(newReview, spotId))
-        .then(closeModal) // Close the modal on success
-        .catch((error) => { // Handle any errors from the dispatch
-            if (error.errors) {
-                setErrors(error.errors);
-            } else if (error.message) {
-                setErrors({ message: error.message });
-            }
-        });
+    .catch((error) => { // Handle any errors from the dispatch
+        if (error.errors) {
+            setErrors(error.errors);
+        } else if (error.message) {
+            setErrors({ message: error.message });
+        }
+    }).then(closeModal) // Close the modal on success
+        
 };
 //end submit
     
@@ -45,7 +46,7 @@ function ReviewFormModal({spotId}){
         setReview(e.target.value)
         if (review.trim().length < 10) {
             validationErrors.review ='The review should be at least 10 characters long.'
-            console.log(validationErrors.review)
+            // console.log(validationErrors.review)
         }
         if (!rating || rating < 1) {
             validationErrors.stars = 'The star rating should be at least one star.'
@@ -66,7 +67,12 @@ function ReviewFormModal({spotId}){
         setErrors(validationErrors);
     }
 
-    const StarIcon = ({ filled, onClick }) => (
+    const handleStarHover = (hoverValue) => {
+        setHoverRating(hoverValue); // Set hover state to display filled stars on hover
+    }
+    
+
+    const StarIcon = ({ filled, onClick, onMouseOver, onMouseOut }) => (
         <svg
           width="24"
           height="24"
@@ -77,6 +83,8 @@ function ReviewFormModal({spotId}){
           strokeLinecap="round"
           strokeLinejoin="round"
           onClick={onClick} // Correctly pass onClick to make the stars interactive
+          onMouseOver={onMouseOver} // Pass onMouseOver to handle hover events
+          onMouseOut={onMouseOut}
           style={{ cursor: 'pointer' }} // Ensures stars are clickable
         >
           <polygon points="12 2 15 8.5 22 9.3 17 14 18.5 21 12 17 5.5 21 7 14 2 9.3 9 8.5 12 2" />
@@ -102,16 +110,17 @@ function ReviewFormModal({spotId}){
                 className='reviewStars' 
                 style={{ display: 'flex' }}>
                
-                {[...Array(5)].map((_, index) => (
-                        <StarIcon 
-                            key={index} 
-                            onClick={() => handleStarClick(index + 1)}
-                            style={{cursor:'pointer'}}
-                            filled = {index < rating}
-                        />
-                    
-                    ))//end map
-                    }
+            {[...Array(5)].map((_, index) => (
+            <StarIcon 
+                key={index} 
+                onClick={() => handleStarClick(index + 1)}
+                onMouseOver={() => handleStarHover(index + 1)}
+                onMouseOut={() => handleStarHover(0)}  
+                style={{cursor:'pointer'}}
+                filled={index < hoverRating ||index < rating }  
+            />
+            ))}
+
                     <span> Stars</span>
                          
             </div>
