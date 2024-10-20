@@ -17,9 +17,9 @@ const UpdateSpotForm = () => {
   // console.log('spots:', spots)
   // console.log('spotId:', spotId)
   const currSpot = spots[spotId]
-  console.log('currSpot:', currSpot)
+  // console.log('currSpot:', currSpot)
   const sessionUser = useSelector(state=>state.session.user);
-  console.log('sesssionUser:', sessionUser)
+  // console.log('sesssionUser:', sessionUser)
   
 
   /* dispatch current spot information in store*/
@@ -113,14 +113,14 @@ const UpdateSpotForm = () => {
             lng
           }
 
-      console.log('updated Spot:', updatedSpot);
+      // console.log('updated Spot:', updatedSpot);
 
           dispatch(spotsActions.editSpot(updatedSpot, spotId))          
           .catch((error) =>{
-            console.log('error:', error);
+            // console.log('error:', error);
             if(error.errors){
               setErrors(prevError => ({ ...prevError, ...error.errors }))
-              console.log('\nerrors:', errors)
+              // console.log('\nerrors:', errors)
             } else if(error.message) {
               setErrors({message: error.message});
             } else{

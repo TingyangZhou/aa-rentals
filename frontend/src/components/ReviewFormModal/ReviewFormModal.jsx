@@ -18,7 +18,7 @@ function ReviewFormModal({spotId}){
     const [ hoverRating, setHoverRating ] = useState(0);
 
    
-    console.log('\nspotId:', spotId)
+    // console.log('\nspotId:', spotId)
 
   const handleSubmit = (e) => {
     e.preventDefault();

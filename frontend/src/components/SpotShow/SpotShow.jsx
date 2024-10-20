@@ -16,14 +16,14 @@ const SpotShow = ({ isLoaded }) => {
     const currSpot = useSelector(state => state.spots[spotId]);
 
     const reviews = useSelector(state => state.reviews);
-    console.log('reviews:', reviews)
+    // console.log('reviews:', reviews)
 
     const spotImageArr = currSpot?.SpotImages;
     const previewImage = spotImageArr?.length > 0 ? spotImageArr[0] : null; 
     const otherImages = spotImageArr?.length > 1 ? spotImageArr.slice(1) : null; 
 
     const numReviews = currSpot?.numReviews || 0;   
-    console.log('numReviews:', numReviews)
+    // console.log('numReviews:', numReviews)
     const ownerId = currSpot?.ownerId;
    
     useEffect(() => {

@@ -129,7 +129,7 @@ export default function SpotForm({ newSpot, formType }) {
         try {
             // First dispatch: create the spot
             const spot = await dispatch(spotsActions.writeSpot(newSpot)); // Wait for spot to be created
-            console.log('spot:', spot);
+            // console.log('spot:', spot);
             if (spot && spot.id) {
                 try {
                   // Second dispatch: create the spotImage
@@ -150,7 +150,7 @@ export default function SpotForm({ newSpot, formType }) {
             }
 
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             setErrors(prevError => ({ ...prevError, ...error }));
             return;
         }

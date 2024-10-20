@@ -29,7 +29,7 @@ function Reviews({ spotId, avgRating, numReviews, ownerId }){
     if (reviewArr.length > 0){
         hasPostedReview = reviewArr.some(review => review?.userId === sessionUser?.id);
     }
-        console.log('reviewArr:', reviewArr);
+        // console.log('reviewArr:', reviewArr);
 
     useEffect(()=>{
         if (sessionUser)  setIsNotOwner(sessionUser?.id !== ownerId);
