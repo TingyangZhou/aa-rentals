@@ -67,7 +67,7 @@ const SpotShow = ({ isLoaded }) => {
                         <div data-testid='spot-price' className="price">${currSpot?.price} <label>night</label></div>
                         <div className='rating'>
                             <span>&#9733;</span>
-                            {currSpot?.avgStarRating ? currSpot?.avgStarRating.toFixed(1) : "New"}{numReviews === 0 
+                            {currSpot?.avgStarRating ? Number(currSpot?.avgStarRating).toFixed(1) : "New"}{numReviews === 0 
                             ? '':
                             ` · ${numReviews} ${numReviews > 1 ? 'reviews' : 'review'}`}
                         </div>

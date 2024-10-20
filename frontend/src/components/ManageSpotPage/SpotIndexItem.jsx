@@ -6,7 +6,7 @@ import ConfirmDeleteFormModal from './ConfirmDeleteFormModal';'./ConfirmDeleteFo
 
 const SpotIndexItem = ({spot}) => {
     const navigate = useNavigate();
- 
+    // console.log('typeof avgRating:', typeof Number(spot?.avgRating))
 
     return (
         <div data-testid='user-spots' className='spot-container'>
@@ -21,7 +21,7 @@ const SpotIndexItem = ({spot}) => {
                     <div className='spot-info-wrapper'>
                         <div className="spot-location-container">
                             <div className='spot-location'>{spot?.city}, {spot?.state}</div>
-                            <div className='rating'><span>&#9733;</span>{spot?.avgRating ? spot?.avgRating.toFixed(1) : "New"}</div>
+                            <div className='rating'><span>&#9733;</span>{spot?.avgRating ? Number(spot?.avgRating).toFixed(1) : "New"}</div>
                         </div>
                         <div className="spot-price">${spot?.price} <label>night</label></div>
                     </div>

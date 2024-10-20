@@ -17,7 +17,7 @@ const SpotIndexItem = ({spot}) => {
                 <div className='spot-info-wrapper'>
                     <div className="spot-location-container">
                         <div data-testid='spot-city' className='spot-location'>{spot.city}, {spot.state}</div>
-                        <div data-testid='spot-rating' className='rating'><span>&#9733;</span>{spot.avgRating ? spot.avgRating.toFixed(1) : "New"}</div>
+                        <div data-testid='spot-rating' className='rating'><span>&#9733;</span>{spot.avgRating ? Number(spot?.avgRating).toFixed(1) : "New"}</div>
                     </div>
                     <div data-testid='spot-price' className="spot-price">${spot.price} <label>night</label></div>
                 </div>

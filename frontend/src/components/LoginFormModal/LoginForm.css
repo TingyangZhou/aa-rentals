@@ -73,6 +73,7 @@
 
   .demo-login{
     margin:8px;
+    cursor:pointer;
   }
 
   .demo-login:hover {

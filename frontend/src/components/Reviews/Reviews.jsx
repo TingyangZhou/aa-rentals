@@ -57,7 +57,7 @@ function Reviews({ spotId, avgRating, numReviews, ownerId }){
             <div data-testid='reviews-heading' className='avgRating-wrapper'>
                 <h2 data-testid='review-count' className='review-rating'>
                     <span> &#9733; </span> 
-                    {avgRating ? avgRating.toFixed(1) : "New"} {numReviews === 0 
+                    {avgRating ? Number(avgRating).toFixed(1) : "New"} {numReviews === 0 
                     ? '' 
                     : ` ·  ${numReviews} ${numReviews > 1 ? 'reviews' : 'review'}`}
                                     
