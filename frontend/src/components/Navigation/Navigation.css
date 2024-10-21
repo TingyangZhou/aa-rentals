@@ -3,11 +3,29 @@
   }
 
   .airbnb-logo{
-    width:150px;
+    width: 45px;
     height: auto;
     cursor:pointer;
     padding-top:20px;
+    /* border: 1px solid red; */
     
+  }
+ 
+  .logo {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: space-center;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  .logo p {
+    margin-top: 0px;
+    color: red;
+    font-size: 18px;
+    font-weight: bold;
+
   }
 
   .button-session-links-wrapper{
@@ -48,6 +66,8 @@
   .home {
     list-style-type: none;
   }
+
+
 
   .session-links{
     list-style-type: none;

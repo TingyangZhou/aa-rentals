@@ -17,12 +17,13 @@ function Navigation({ isLoaded }) {
   return (
     <nav className='home-nav-bar'>
        
-      <NavLink to="/">
+      <NavLink className='logo' to="/">
         <img data-testid='logo'
           src={airbnbLogo}
           alt='Airbnb Logo'
           className='airbnb-logo'
         />
+        <p>aaRentals</p>
       </NavLink>  
 
       <div className='button-session-links-wrapper'>
