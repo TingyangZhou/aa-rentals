@@ -1,3 +1,6 @@
+Live site: https://aa-rentals.onrender.com 
+
+AA-Rentals is a full-stack web application inspired by Airbnb. Logged-in users can explore, create, and update properties as well as post reviews with ease.
 # Mod 4 Project
 
 ## Database Schema Design
